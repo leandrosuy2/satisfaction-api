@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateCompanyDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
+const line_type_enum_1 = require("../enums/line-type.enum");
 class CreateCompanyDto {
 }
 exports.CreateCompanyDto = CreateCompanyDto;
@@ -105,4 +106,13 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateCompanyDto.prototype, "user_edt", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        enum: line_type_enum_1.LineType,
+        description: 'Tipo de linha da empresa (0: Votação, 1: Tradicional, 2: Leve, 3: Japonesa, 4: Grill, 5: Gourmet)',
+        default: line_type_enum_1.LineType.VOTACAO
+    }),
+    (0, class_validator_1.IsEnum)(line_type_enum_1.LineType),
+    __metadata("design:type", Number)
+], CreateCompanyDto.prototype, "linha", void 0);
 //# sourceMappingURL=create-company.dto.js.map

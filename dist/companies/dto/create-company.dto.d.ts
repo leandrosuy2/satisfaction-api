@@ -1,3 +1,4 @@
+import { LineType } from '../enums/line-type.enum';
 export declare class CreateCompanyDto {
     nome: string;
     razao_social: string;
@@ -14,4 +15,5 @@ export declare class CreateCompanyDto {
     cidade?: string;
     estado?: string;
     user_edt: string;
+    linha: LineType;
 }

@@ -51,6 +51,21 @@ let CompaniesService = class CompaniesService {
         }
         return company;
     }
+    async update(id, updateCompanyDto) {
+        const company = await this.findOne(id);
+        Object.assign(company, updateCompanyDto);
+        return this.companyRepository.save(company);
+    }
+    async updateService(id, serviceId, updateServiceDto) {
+        const service = await this.companyServiceRepository.findOne({
+            where: { id: serviceId, id_empresa: id },
+        });
+        if (!service) {
+            throw new common_1.NotFoundException(`Service with ID ${serviceId} not found in company ${id}`);
+        }
+        Object.assign(service, updateServiceDto);
+        return this.companyServiceRepository.save(service);
+    }
     findServices(id) {
         return this.companyServiceRepository.find({
             where: { id_empresa: id, status: true },
@@ -60,6 +75,16 @@ let CompaniesService = class CompaniesService {
         const company = await this.findOne(id);
         company.status = false;
         return this.companyRepository.save(company);
+    }
+    async removeService(id, serviceId) {
+        const service = await this.companyServiceRepository.findOne({
+            where: { id: serviceId, id_empresa: id },
+        });
+        if (!service) {
+            throw new common_1.NotFoundException(`Service with ID ${serviceId} not found in company ${id}`);
+        }
+        service.status = false;
+        return this.companyServiceRepository.save(service);
     }
 };
 exports.CompaniesService = CompaniesService;

@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { CompanyService } from './company-service.entity';
+import { LineType } from '../enums/line-type.enum';
 
 @Entity('companies')
 export class Company {
@@ -79,6 +80,18 @@ export class Company {
   @ApiProperty()
   @Column()
   user_edt: string;
+
+  @ApiProperty({ 
+    enum: LineType,
+    description: 'Tipo de linha da empresa (0: Votação, 1: Tradicional, 2: Leve, 3: Japonesa, 4: Grill, 5: Gourmet)',
+    default: LineType.VOTACAO
+  })
+  @Column({
+    type: 'enum',
+    enum: LineType,
+    default: LineType.VOTACAO
+  })
+  linha: LineType;
 
   @ApiProperty({ type: () => CompanyService })
   @OneToMany(() => CompanyService, service => service.company)

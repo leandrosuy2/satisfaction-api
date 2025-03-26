@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "3005:3005"
     environment:
       - NODE_ENV=development
       - DATABASE_HOST=postgres
@@ -14,7 +14,7 @@ services:
       - DATABASE_USERNAME=postgres
       - DATABASE_PASSWORD=postgres
       - DATABASE_NAME=satisfaction
-      - JWT_SECRET=your-super-secret-key
+      - JWT_SECRET=40c4at-6sCVQXff9hHylOvUOQgfSYT_i_gXkPsBzs5wLbyoNx-jMsOJMI2rM5mumdi9GIFN227H7DILkyid3hg
     depends_on:
       - postgres
     volumes:
@@ -25,7 +25,7 @@ services:
   postgres:
     image: postgres:15-alpine
     ports:
-      - "5432:5432"
+      - "5433:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres

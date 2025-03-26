@@ -8,6 +8,8 @@ import { UsersModule } from './users/users.module';
 import { QuestionsModule } from './questions/questions.module';
 import { QuestionnairesModule } from './questionnaires/questionnaires.module';
 import { WebsocketModule } from './websocket/websocket.module';
+import { VotesModule } from './votes/votes.module';
+
 
 @Module({
   imports: [
@@ -35,6 +37,7 @@ import { WebsocketModule } from './websocket/websocket.module';
     QuestionsModule,
     QuestionnairesModule,
     WebsocketModule,
+    VotesModule,
   ],
 })
 export class AppModule {}

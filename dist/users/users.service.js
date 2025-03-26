@@ -48,13 +48,9 @@ let UsersService = class UsersService {
         return user;
     }
     async findByUsername(username) {
-        const user = await this.userRepository.findOne({
+        return this.userRepository.findOne({
             where: { username, status: true },
         });
-        if (!user) {
-            throw new common_1.NotFoundException(`User with username ${username} not found`);
-        }
-        return user;
     }
     async remove(id) {
         const user = await this.findOne(id);

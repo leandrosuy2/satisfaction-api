@@ -13,6 +13,7 @@ exports.Company = void 0;
 const typeorm_1 = require("typeorm");
 const swagger_1 = require("@nestjs/swagger");
 const company_service_entity_1 = require("./company-service.entity");
+const line_type_enum_1 = require("../enums/line-type.enum");
 let Company = class Company {
 };
 exports.Company = Company;
@@ -111,6 +112,19 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Company.prototype, "user_edt", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        enum: line_type_enum_1.LineType,
+        description: 'Tipo de linha da empresa (0: Votação, 1: Tradicional, 2: Leve, 3: Japonesa, 4: Grill, 5: Gourmet)',
+        default: line_type_enum_1.LineType.VOTACAO
+    }),
+    (0, typeorm_1.Column)({
+        type: 'enum',
+        enum: line_type_enum_1.LineType,
+        default: line_type_enum_1.LineType.VOTACAO
+    }),
+    __metadata("design:type", Number)
+], Company.prototype, "linha", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ type: () => company_service_entity_1.CompanyService }),
     (0, typeorm_1.OneToMany)(() => company_service_entity_1.CompanyService, service => service.company),

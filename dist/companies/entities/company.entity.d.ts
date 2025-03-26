@@ -1,4 +1,5 @@
 import { CompanyService } from './company-service.entity';
+import { LineType } from '../enums/line-type.enum';
 export declare class Company {
     id: string;
     nome: string;
@@ -19,6 +20,7 @@ export declare class Company {
     resto_ingesta: number;
     status: boolean;
     user_edt: string;
+    linha: LineType;
     servicos: CompanyService[];
     created_at: Date;
     updated_at: Date;
