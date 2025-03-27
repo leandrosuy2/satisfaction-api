@@ -33,7 +33,7 @@ export class CompaniesService {
 
   findAll() {
     return this.companyRepository.find({
-      relations: ['usuarios'],
+      relations: ['usuarios', 'servicos'],
       order: {
         created_at: 'DESC'
       }
@@ -43,7 +43,7 @@ export class CompaniesService {
   async findOne(id: string) {
     const company = await this.companyRepository.findOne({
       where: { id },
-      relations: ['usuarios'],
+      relations: ['usuarios', 'servicos'],
     });
 
     if (!company) {

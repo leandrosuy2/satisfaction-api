@@ -37,7 +37,7 @@ let CompaniesService = class CompaniesService {
     }
     findAll() {
         return this.companyRepository.find({
-            relations: ['usuarios'],
+            relations: ['usuarios', 'servicos'],
             order: {
                 created_at: 'DESC'
             }
@@ -46,7 +46,7 @@ let CompaniesService = class CompaniesService {
     async findOne(id) {
         const company = await this.companyRepository.findOne({
             where: { id },
-            relations: ['usuarios'],
+            relations: ['usuarios', 'servicos'],
         });
         if (!company) {
             throw new common_1.NotFoundException(`Company with ID ${id} not found`);
