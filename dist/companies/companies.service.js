@@ -37,14 +37,16 @@ let CompaniesService = class CompaniesService {
     }
     findAll() {
         return this.companyRepository.find({
-            where: { status: true },
-            relations: ['servicos'],
+            relations: ['usuarios'],
+            order: {
+                created_at: 'DESC'
+            }
         });
     }
     async findOne(id) {
         const company = await this.companyRepository.findOne({
-            where: { id, status: true },
-            relations: ['servicos'],
+            where: { id },
+            relations: ['usuarios'],
         });
         if (!company) {
             throw new common_1.NotFoundException(`Company with ID ${id} not found`);
@@ -85,6 +87,16 @@ let CompaniesService = class CompaniesService {
         }
         service.status = false;
         return this.companyServiceRepository.save(service);
+    }
+    async addUser(companyId, userId) {
+        const company = await this.findOne(companyId);
+        company.usuarios = [...(company.usuarios || []), { id: userId }];
+        return this.companyRepository.save(company);
+    }
+    async removeUser(companyId, userId) {
+        const company = await this.findOne(companyId);
+        company.usuarios = company.usuarios.filter(user => user.id !== userId);
+        return this.companyRepository.save(company);
     }
 };
 exports.CompaniesService = CompaniesService;

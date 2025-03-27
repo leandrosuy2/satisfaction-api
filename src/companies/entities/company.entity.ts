@@ -1,7 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToMany, JoinTable } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { CompanyService } from './company-service.entity';
 import { LineType } from '../enums/line-type.enum';
+import { User } from '../../users/entities/user.entity';
 
 @Entity('companies')
 export class Company {
@@ -96,6 +97,21 @@ export class Company {
   @ApiProperty({ type: () => CompanyService })
   @OneToMany(() => CompanyService, service => service.company)
   servicos: CompanyService[];
+
+  @ApiProperty({ type: () => User })
+  @ManyToMany(() => User, user => user.empresas)
+  @JoinTable({
+    name: 'company_users',
+    joinColumn: {
+      name: 'company_id',
+      referencedColumnName: 'id'
+    },
+    inverseJoinColumn: {
+      name: 'user_id',
+      referencedColumnName: 'id'
+    }
+  })
+  usuarios: User[];
 
   @ApiProperty()
   @CreateDateColumn()

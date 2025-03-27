@@ -3,6 +3,8 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagg
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdatePermissionsDto } from './dto/update-permissions.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AccessProfile } from './enums/access-profile.enum';
 
@@ -11,7 +13,30 @@ import { AccessProfile } from './enums/access-profile.enum';
 @UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
+
+  @Get('access-profiles')
+  @ApiOperation({ summary: 'Get all available access profiles' })
+  @ApiResponse({
+    status: 200,
+    description: 'Return all available access profiles',
+    schema: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          value: { type: 'string' },
+          label: { type: 'string' }
+        }
+      }
+    }
+  })
+  getAccessProfiles() {
+    return Object.entries(AccessProfile).map(([key, value]) => ({
+      value,
+      label: value
+    }));
+  }
 
   @Post()
   @ApiOperation({ summary: 'Create a new user' })
@@ -75,26 +100,27 @@ export class UsersController {
     return this.usersService.remove(id);
   }
 
-  @Get('access-profiles')
-  @ApiOperation({ summary: 'Get all available access profiles' })
-  @ApiResponse({ 
-    status: 200, 
-    description: 'Return all available access profiles',
-    schema: {
-      type: 'array',
-      items: {
-        type: 'object',
-        properties: {
-          value: { type: 'string' },
-          label: { type: 'string' }
-        }
-      }
-    }
-  })
-  getAccessProfiles() {
-    return Object.entries(AccessProfile).map(([key, value]) => ({
-      value,
-      label: value
-    }));
+  @Put(':id')
+  @ApiOperation({ summary: 'Update user' })
+  @ApiResponse({ status: 200, description: 'User successfully updated' })
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.update(id, updateUserDto);
+  }
+
+  @Get(':id/permissions')
+  @ApiOperation({ summary: 'Get user permissions' })
+  @ApiResponse({ status: 200, description: 'Return user permissions' })
+  getUserPermissions(@Param('id') id: string) {
+    return this.usersService.getUserPermissions(id);
+  }
+
+  @Put(':id/permissions')
+  @ApiOperation({ summary: 'Update user permission' })
+  @ApiResponse({ status: 200, description: 'Permission successfully updated' })
+  updatePermission(
+    @Param('id') id: string,
+    @Body() updatePermissionsDto: UpdatePermissionsDto,
+  ) {
+    return this.usersService.updatePermission(id, updatePermissionsDto);
   }
 }

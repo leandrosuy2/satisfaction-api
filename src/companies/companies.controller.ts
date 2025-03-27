@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Put } from '@nestjs/common';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { CreateCompanyServiceDto } from './dto/create-company-service.dto';
@@ -74,7 +74,7 @@ export class CompaniesController {
     return this.companiesService.findServices(id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   @ApiOperation({ summary: 'Update company' })
   @ApiResponse({ status: 200, description: 'Company successfully updated' })
   update(@Param('id') id: string, @Body() updateCompanyDto: UpdateCompanyDto) {
@@ -103,5 +103,19 @@ export class CompaniesController {
     @Param('serviceId') serviceId: string,
   ) {
     return this.companiesService.removeService(id, serviceId);
+  }
+
+  @Post(':id/users/:userId')
+  @ApiOperation({ summary: 'Add user to company' })
+  @ApiResponse({ status: 200, description: 'User successfully added to company' })
+  addUser(@Param('id') id: string, @Param('userId') userId: string) {
+    return this.companiesService.addUser(id, userId);
+  }
+
+  @Delete(':id/users/:userId')
+  @ApiOperation({ summary: 'Remove user from company' })
+  @ApiResponse({ status: 200, description: 'User successfully removed from company' })
+  removeUser(@Param('id') id: string, @Param('userId') userId: string) {
+    return this.companiesService.removeUser(id, userId);
   }
 }

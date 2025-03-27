@@ -24,13 +24,19 @@ export class RegisterDto {
   @IsNotEmpty()
   email: string;
 
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  cargo: string;
+
   @ApiProperty({ enum: AccessProfile, default: AccessProfile.CLIENTE })
   @IsEnum(AccessProfile)
   perfil_acesso: AccessProfile;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
+  @IsOptional()
   @IsArray()
-  empresas: { id_empresa: string; nome_empresa: string; status: boolean }[];
+  empresas?: { id_empresa: string; nome_empresa: string; status: boolean }[];
 
   @ApiProperty({ required: false })
   @IsOptional()
@@ -46,9 +52,4 @@ export class RegisterDto {
   @IsOptional()
   @IsString()
   setor?: string;
-
-  @ApiProperty({ required: false })
-  @IsOptional()
-  @IsString()
-  cargo?: string;
 } 

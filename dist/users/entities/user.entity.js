@@ -14,6 +14,7 @@ const typeorm_1 = require("typeorm");
 const swagger_1 = require("@nestjs/swagger");
 const company_entity_1 = require("../../companies/entities/company.entity");
 const access_profile_enum_1 = require("../enums/access-profile.enum");
+const user_permission_entity_1 = require("./user-permission.entity");
 let User = class User {
 };
 exports.User = User;
@@ -64,6 +65,11 @@ __decorate([
 ], User.prototype, "setor", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", String)
+], User.prototype, "cargo", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
     (0, typeorm_1.Column)({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' }),
     __metadata("design:type", Date)
 ], User.prototype, "date_acs", void 0);
@@ -82,19 +88,15 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "perfil_acesso", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)(),
-    (0, typeorm_1.Column)('jsonb', { nullable: true }),
+    (0, swagger_1.ApiProperty)({ type: () => company_entity_1.Company }),
+    (0, typeorm_1.ManyToMany)(() => company_entity_1.Company, company => company.usuarios),
     __metadata("design:type", Array)
 ], User.prototype, "empresas", void 0);
 __decorate([
-    (0, typeorm_1.ManyToMany)(() => company_entity_1.Company),
-    (0, typeorm_1.JoinTable)({
-        name: 'user_companies',
-        joinColumn: { name: 'user_id', referencedColumnName: 'id' },
-        inverseJoinColumn: { name: 'company_id', referencedColumnName: 'id' },
-    }),
+    (0, swagger_1.ApiProperty)({ type: () => user_permission_entity_1.UserPermission }),
+    (0, typeorm_1.OneToMany)(() => user_permission_entity_1.UserPermission, permission => permission.user),
     __metadata("design:type", Array)
-], User.prototype, "companiesRelation", void 0);
+], User.prototype, "permissions", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
     (0, typeorm_1.CreateDateColumn)(),

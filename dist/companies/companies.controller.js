@@ -61,6 +61,12 @@ let CompaniesController = class CompaniesController {
     removeService(id, serviceId) {
         return this.companiesService.removeService(id, serviceId);
     }
+    addUser(id, userId) {
+        return this.companiesService.addUser(id, userId);
+    }
+    removeUser(id, userId) {
+        return this.companiesService.removeUser(id, userId);
+    }
 };
 exports.CompaniesController = CompaniesController;
 __decorate([
@@ -126,7 +132,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], CompaniesController.prototype, "findServices", null);
 __decorate([
-    (0, common_1.Patch)(':id'),
+    (0, common_1.Put)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Update company' }),
     (0, swagger_1.ApiResponse)({ status: 200, description: 'Company successfully updated' }),
     __param(0, (0, common_1.Param)('id')),
@@ -161,6 +167,26 @@ __decorate([
     __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", void 0)
 ], CompaniesController.prototype, "removeService", null);
+__decorate([
+    (0, common_1.Post)(':id/users/:userId'),
+    (0, swagger_1.ApiOperation)({ summary: 'Add user to company' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'User successfully added to company' }),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Param)('userId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", void 0)
+], CompaniesController.prototype, "addUser", null);
+__decorate([
+    (0, common_1.Delete)(':id/users/:userId'),
+    (0, swagger_1.ApiOperation)({ summary: 'Remove user from company' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'User successfully removed from company' }),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Param)('userId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", void 0)
+], CompaniesController.prototype, "removeUser", null);
 exports.CompaniesController = CompaniesController = __decorate([
     (0, swagger_1.ApiTags)('companies'),
     (0, swagger_1.ApiBearerAuth)(),

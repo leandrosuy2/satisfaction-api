@@ -1,7 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany, OneToMany } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { Company } from '../../companies/entities/company.entity';
 import { AccessProfile } from '../enums/access-profile.enum';
+import { UserPermission } from './user-permission.entity';
 
 @Entity('users')
 export class User {
@@ -23,7 +24,7 @@ export class User {
 
   @ApiProperty()
   @Column({ nullable: true })
-  image: string;
+  image?: string;
 
   @ApiProperty()
   @Column({ unique: true })
@@ -31,15 +32,19 @@ export class User {
 
   @ApiProperty()
   @Column({ nullable: true })
-  telcel: string;
+  telcel?: string;
 
   @ApiProperty()
   @Column({ nullable: true })
-  id_perfil: string;
+  id_perfil?: string;
 
   @ApiProperty()
   @Column({ nullable: true })
-  setor: string;
+  setor?: string;
+
+  @ApiProperty()
+  @Column({ nullable: true })
+  cargo?: string;
 
   @ApiProperty()
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
@@ -57,17 +62,13 @@ export class User {
   })
   perfil_acesso: AccessProfile;
 
-  @ApiProperty()
-  @Column('jsonb', { nullable: true })
-  empresas: { id_empresa: string; nome_empresa: string; status: boolean }[];
+  @ApiProperty({ type: () => Company })
+  @ManyToMany(() => Company, company => company.usuarios)
+  empresas: Company[];
 
-  @ManyToMany(() => Company)
-  @JoinTable({
-    name: 'user_companies',
-    joinColumn: { name: 'user_id', referencedColumnName: 'id' },
-    inverseJoinColumn: { name: 'company_id', referencedColumnName: 'id' },
-  })
-  companiesRelation: Company[];
+  @ApiProperty({ type: () => UserPermission })
+  @OneToMany(() => UserPermission, permission => permission.user)
+  permissions: UserPermission[];
 
   @ApiProperty()
   @CreateDateColumn()

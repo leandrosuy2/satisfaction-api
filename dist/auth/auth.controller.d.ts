@@ -12,7 +12,9 @@ export declare class AuthController {
             username: string;
             nome: string;
             email: string;
+            cargo: string;
             perfil_acesso: import("../users/enums/access-profile.enum").AccessProfile;
+            empresas: import("../companies/entities/company.entity").Company[];
         };
     }>;
     login(loginDto: LoginDto): Promise<{
@@ -22,7 +24,9 @@ export declare class AuthController {
             username: any;
             nome: any;
             email: any;
+            cargo: any;
             perfil_acesso: any;
+            empresas: any;
         };
     }>;
     refreshToken(req: Request): Promise<{
@@ -32,7 +36,9 @@ export declare class AuthController {
             username: any;
             nome: any;
             email: any;
+            cargo: any;
             perfil_acesso: any;
+            empresas: any;
         };
     }>;
 }

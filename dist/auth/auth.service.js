@@ -42,7 +42,9 @@ let AuthService = class AuthService {
                 username: user.username,
                 nome: user.nome,
                 email: user.email,
+                cargo: user.cargo,
                 perfil_acesso: user.perfil_acesso,
+                empresas: user.empresas,
             }
         };
     }
@@ -55,7 +57,9 @@ let AuthService = class AuthService {
                 username: user.username,
                 nome: user.nome,
                 email: user.email,
+                cargo: user.cargo,
                 perfil_acesso: user.perfil_acesso,
+                empresas: user.empresas,
             }
         };
     }
@@ -68,7 +72,9 @@ let AuthService = class AuthService {
                 username: user.username,
                 nome: user.nome,
                 email: user.email,
+                cargo: user.cargo,
                 perfil_acesso: user.perfil_acesso,
+                empresas: user.empresas,
             }
         };
     }

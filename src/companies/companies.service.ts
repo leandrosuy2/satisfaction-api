@@ -33,15 +33,17 @@ export class CompaniesService {
 
   findAll() {
     return this.companyRepository.find({
-      where: { status: true },
-      relations: ['servicos'],
+      relations: ['usuarios'],
+      order: {
+        created_at: 'DESC'
+      }
     });
   }
 
   async findOne(id: string) {
     const company = await this.companyRepository.findOne({
-      where: { id, status: true },
-      relations: ['servicos'],
+      where: { id },
+      relations: ['usuarios'],
     });
 
     if (!company) {
@@ -53,7 +55,6 @@ export class CompaniesService {
 
   async update(id: string, updateCompanyDto: UpdateCompanyDto) {
     const company = await this.findOne(id);
-    
     Object.assign(company, updateCompanyDto);
     return this.companyRepository.save(company);
   }
@@ -94,5 +95,17 @@ export class CompaniesService {
 
     service.status = false;
     return this.companyServiceRepository.save(service);
+  }
+
+  async addUser(companyId: string, userId: string) {
+    const company = await this.findOne(companyId);
+    company.usuarios = [...(company.usuarios || []), { id: userId } as any];
+    return this.companyRepository.save(company);
+  }
+
+  async removeUser(companyId: string, userId: string) {
+    const company = await this.findOne(companyId);
+    company.usuarios = company.usuarios.filter(user => user.id !== userId);
+    return this.companyRepository.save(company);
   }
 }

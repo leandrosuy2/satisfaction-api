@@ -14,6 +14,7 @@ const typeorm_1 = require("typeorm");
 const swagger_1 = require("@nestjs/swagger");
 const company_service_entity_1 = require("./company-service.entity");
 const line_type_enum_1 = require("../enums/line-type.enum");
+const user_entity_1 = require("../../users/entities/user.entity");
 let Company = class Company {
 };
 exports.Company = Company;
@@ -130,6 +131,22 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => company_service_entity_1.CompanyService, service => service.company),
     __metadata("design:type", Array)
 ], Company.prototype, "servicos", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: () => user_entity_1.User }),
+    (0, typeorm_1.ManyToMany)(() => user_entity_1.User, user => user.empresas),
+    (0, typeorm_1.JoinTable)({
+        name: 'company_users',
+        joinColumn: {
+            name: 'company_id',
+            referencedColumnName: 'id'
+        },
+        inverseJoinColumn: {
+            name: 'user_id',
+            referencedColumnName: 'id'
+        }
+    }),
+    __metadata("design:type", Array)
+], Company.prototype, "usuarios", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
     (0, typeorm_1.CreateDateColumn)(),

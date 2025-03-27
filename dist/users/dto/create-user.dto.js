@@ -65,12 +65,19 @@ __decorate([
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "setor", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ required: false }),
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], CreateUserDto.prototype, "cargo", void 0);
+__decorate([
     (0, swagger_1.ApiProperty)({ enum: access_profile_enum_1.AccessProfile, default: access_profile_enum_1.AccessProfile.CLIENTE }),
     (0, class_validator_1.IsEnum)(access_profile_enum_1.AccessProfile),
     __metadata("design:type", String)
 ], CreateUserDto.prototype, "perfil_acesso", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)(),
+    (0, swagger_1.ApiProperty)({ required: false }),
+    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsArray)(),
     __metadata("design:type", Array)
 ], CreateUserDto.prototype, "empresas", void 0);

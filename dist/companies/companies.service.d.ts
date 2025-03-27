@@ -18,4 +18,6 @@ export declare class CompaniesService {
     findServices(id: string): Promise<CompanyService[]>;
     remove(id: string): Promise<Company>;
     removeService(id: string, serviceId: string): Promise<CompanyService>;
+    addUser(companyId: string, userId: string): Promise<Company>;
+    removeUser(companyId: string, userId: string): Promise<Company>;
 }

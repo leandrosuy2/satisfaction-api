@@ -43,11 +43,17 @@ export class CreateUserDto {
   @IsString()
   setor?: string;
 
+  @ApiProperty({ required: false })
+  @IsNotEmpty()
+  @IsString()
+  cargo: string;
+
   @ApiProperty({ enum: AccessProfile, default: AccessProfile.CLIENTE })
   @IsEnum(AccessProfile)
   perfil_acesso: AccessProfile;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
+  @IsOptional()
   @IsArray()
-  empresas: { id_empresa: string; nome_empresa: string; status: boolean }[];
+  empresas?: { id_empresa: string; nome_empresa: string; status: boolean }[];
 }

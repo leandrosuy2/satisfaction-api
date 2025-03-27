@@ -4,8 +4,9 @@ export declare class RegisterDto {
     password: string;
     nome: string;
     email: string;
+    cargo: string;
     perfil_acesso: AccessProfile;
-    empresas: {
+    empresas?: {
         id_empresa: string;
         nome_empresa: string;
         status: boolean;
@@ -13,5 +14,4 @@ export declare class RegisterDto {
     image?: string;
     telcel?: string;
     setor?: string;
-    cargo?: string;
 }

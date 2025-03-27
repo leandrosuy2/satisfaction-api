@@ -1,5 +1,6 @@
 import { CompanyService } from './company-service.entity';
 import { LineType } from '../enums/line-type.enum';
+import { User } from '../../users/entities/user.entity';
 export declare class Company {
     id: string;
     nome: string;
@@ -22,6 +23,7 @@ export declare class Company {
     user_edt: string;
     linha: LineType;
     servicos: CompanyService[];
+    usuarios: User[];
     created_at: Date;
     updated_at: Date;
 }
