@@ -26,15 +26,12 @@ export class VotesService {
   }
 
   findAll() {
-    return this.voteRepository.find({
-      relations: ['serviceType'],
-    });
+    return this.voteRepository.find();
   }
 
   async findOne(id_voto: string) {
     const vote = await this.voteRepository.findOne({
-      where: { id_voto },
-      relations: ['serviceType'],
+      where: { id_voto }
     });
 
     if (!vote) {
@@ -46,15 +43,13 @@ export class VotesService {
 
   async findByEmpresa(id_empresa: string) {
     return this.voteRepository.find({
-      where: { id_empresa, status: true },
-      relations: ['serviceType'],
+      where: { id_empresa, status: true }
     });
   }
 
   async findByTipoServico(id_tipo_servico: string) {
     return this.voteRepository.find({
-      where: { id_tipo_servico, status: true },
-      relations: ['serviceType'],
+      where: { id_tipo_servico, status: true }
     });
   }
 
@@ -72,8 +67,7 @@ export class VotesService {
 
   async getAnalytics(companyId: string) {
     const votes = await this.voteRepository.find({
-      where: { id_empresa: companyId, status: true },
-      relations: ['serviceType'],
+      where: { id_empresa: companyId, status: true }
     });
 
     const totalVotes = votes.length;
@@ -92,7 +86,7 @@ export class VotesService {
 
     // Análise por tipo de serviço
     const votesByService = votes.reduce((acc, vote) => {
-      const serviceName = vote.serviceType.nome;
+      const serviceName = vote.id_tipo_servico || 'Sem serviço';
       if (!acc[serviceName]) {
         acc[serviceName] = {
           total: 0,

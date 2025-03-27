@@ -1,6 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { ServiceType } from '../../service-types/entities/service-type.entity';
 import { RatingType } from '../enums/rating-type.enum';
 
 @Entity('votes')
@@ -13,13 +12,9 @@ export class Vote {
   @ApiProperty({ description: 'ID da empresa' })
   id_empresa: string;
 
-  @Column()
-  @ApiProperty({ description: 'ID do tipo de serviço' })
+  @Column({ nullable: true })
+  @ApiProperty({ description: 'ID do tipo de serviço', required: false })
   id_tipo_servico: string;
-
-  @ManyToOne(() => ServiceType)
-  @JoinColumn({ name: 'id_tipo_servico' })
-  serviceType: ServiceType;
 
   @Column({
     type: 'enum',

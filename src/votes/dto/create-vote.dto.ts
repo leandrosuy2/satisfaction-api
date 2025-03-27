@@ -7,9 +7,10 @@ export class CreateVoteDto {
   @IsString()
   id_empresa: string;
 
-  @ApiProperty({ description: 'ID do tipo de serviço' })
+  @ApiProperty({ description: 'ID do tipo de serviço', required: false })
+  @IsOptional()
   @IsString()
-  id_tipo_servico: string;
+  id_tipo_servico?: string;
 
   @ApiProperty({ 
     description: 'Avaliação do serviço',

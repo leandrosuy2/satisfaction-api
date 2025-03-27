@@ -22,7 +22,8 @@ __decorate([
     __metadata("design:type", String)
 ], CreateVoteDto.prototype, "id_empresa", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'ID do tipo de serviço' }),
+    (0, swagger_1.ApiProperty)({ description: 'ID do tipo de serviço', required: false }),
+    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateVoteDto.prototype, "id_tipo_servico", void 0);

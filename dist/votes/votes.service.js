@@ -32,14 +32,11 @@ let VotesService = class VotesService {
         return savedVote;
     }
     findAll() {
-        return this.voteRepository.find({
-            relations: ['serviceType'],
-        });
+        return this.voteRepository.find();
     }
     async findOne(id_voto) {
         const vote = await this.voteRepository.findOne({
-            where: { id_voto },
-            relations: ['serviceType'],
+            where: { id_voto }
         });
         if (!vote) {
             throw new common_1.NotFoundException(`Vote with ID ${id_voto} not found`);
@@ -48,14 +45,12 @@ let VotesService = class VotesService {
     }
     async findByEmpresa(id_empresa) {
         return this.voteRepository.find({
-            where: { id_empresa, status: true },
-            relations: ['serviceType'],
+            where: { id_empresa, status: true }
         });
     }
     async findByTipoServico(id_tipo_servico) {
         return this.voteRepository.find({
-            where: { id_tipo_servico, status: true },
-            relations: ['serviceType'],
+            where: { id_tipo_servico, status: true }
         });
     }
     async remove(id_voto) {
@@ -68,8 +63,7 @@ let VotesService = class VotesService {
     }
     async getAnalytics(companyId) {
         const votes = await this.voteRepository.find({
-            where: { id_empresa: companyId, status: true },
-            relations: ['serviceType'],
+            where: { id_empresa: companyId, status: true }
         });
         const totalVotes = votes.length;
         const avaliacoesPorTipo = Object.values(rating_type_enum_1.RatingType).reduce((acc, tipo) => {
@@ -81,7 +75,7 @@ let VotesService = class VotesService {
             return acc;
         }, {});
         const votesByService = votes.reduce((acc, vote) => {
-            const serviceName = vote.serviceType.nome;
+            const serviceName = vote.id_tipo_servico || 'Sem serviço';
             if (!acc[serviceName]) {
                 acc[serviceName] = {
                     total: 0,

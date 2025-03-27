@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Vote = void 0;
 const typeorm_1 = require("typeorm");
 const swagger_1 = require("@nestjs/swagger");
-const service_type_entity_1 = require("../../service-types/entities/service-type.entity");
 const rating_type_enum_1 = require("../enums/rating-type.enum");
 let Vote = class Vote {
 };
@@ -28,15 +27,10 @@ __decorate([
     __metadata("design:type", String)
 ], Vote.prototype, "id_empresa", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
-    (0, swagger_1.ApiProperty)({ description: 'ID do tipo de serviço' }),
+    (0, typeorm_1.Column)({ nullable: true }),
+    (0, swagger_1.ApiProperty)({ description: 'ID do tipo de serviço', required: false }),
     __metadata("design:type", String)
 ], Vote.prototype, "id_tipo_servico", void 0);
-__decorate([
-    (0, typeorm_1.ManyToOne)(() => service_type_entity_1.ServiceType),
-    (0, typeorm_1.JoinColumn)({ name: 'id_tipo_servico' }),
-    __metadata("design:type", service_type_entity_1.ServiceType)
-], Vote.prototype, "serviceType", void 0);
 __decorate([
     (0, typeorm_1.Column)({
         type: 'enum',
