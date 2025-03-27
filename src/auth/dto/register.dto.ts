@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, MinLength, IsArray, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsString, MinLength, IsArray, IsOptional, IsEmail, IsEnum } from 'class-validator';
+import { AccessProfile } from '../../users/enums/access-profile.enum';
 
 export class RegisterDto {
   @ApiProperty()
@@ -19,13 +20,13 @@ export class RegisterDto {
   nome: string;
 
   @ApiProperty()
+  @IsEmail()
   @IsNotEmpty()
-  @IsString()
-  id_perfil: string;
+  email: string;
 
-  @ApiProperty()
-  @IsArray()
-  perfil_acesso: { nome: string; status: boolean }[];
+  @ApiProperty({ enum: AccessProfile, default: AccessProfile.CLIENTE })
+  @IsEnum(AccessProfile)
+  perfil_acesso: AccessProfile;
 
   @ApiProperty()
   @IsArray()
@@ -39,15 +40,15 @@ export class RegisterDto {
   @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
-  email?: string;
-
-  @ApiProperty({ required: false })
-  @IsOptional()
-  @IsString()
   telcel?: string;
 
   @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
   setor?: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsString()
+  cargo?: string;
 } 

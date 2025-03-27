@@ -9,69 +9,53 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateUserDto = void 0;
+exports.UpdateProfileDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 const access_profile_enum_1 = require("../enums/access-profile.enum");
-class CreateUserDto {
+class UpdateProfileDto {
 }
-exports.CreateUserDto = CreateUserDto;
-__decorate([
-    (0, swagger_1.ApiProperty)(),
-    (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], CreateUserDto.prototype, "nome", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)(),
-    (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], CreateUserDto.prototype, "username", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)(),
-    (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], CreateUserDto.prototype, "password", void 0);
+exports.UpdateProfileDto = UpdateProfileDto;
 __decorate([
     (0, swagger_1.ApiProperty)({ required: false }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], CreateUserDto.prototype, "image", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)(),
-    (0, class_validator_1.IsEmail)(),
-    (0, class_validator_1.IsNotEmpty)(),
-    __metadata("design:type", String)
-], CreateUserDto.prototype, "email", void 0);
+], UpdateProfileDto.prototype, "nome", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ required: false }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], CreateUserDto.prototype, "telcel", void 0);
+], UpdateProfileDto.prototype, "image", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ required: false }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], CreateUserDto.prototype, "id_perfil", void 0);
+], UpdateProfileDto.prototype, "email", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ required: false }),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], CreateUserDto.prototype, "setor", void 0);
+], UpdateProfileDto.prototype, "telcel", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ enum: access_profile_enum_1.AccessProfile, default: access_profile_enum_1.AccessProfile.CLIENTE }),
+    (0, swagger_1.ApiProperty)({ required: false }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdateProfileDto.prototype, "setor", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ enum: access_profile_enum_1.AccessProfile, required: false }),
+    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsEnum)(access_profile_enum_1.AccessProfile),
     __metadata("design:type", String)
-], CreateUserDto.prototype, "perfil_acesso", void 0);
+], UpdateProfileDto.prototype, "perfil_acesso", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)(),
+    (0, swagger_1.ApiProperty)({ required: false }),
+    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsArray)(),
     __metadata("design:type", Array)
-], CreateUserDto.prototype, "empresas", void 0);
-//# sourceMappingURL=create-user.dto.js.map
+], UpdateProfileDto.prototype, "empresas", void 0);
+//# sourceMappingURL=update-profile.dto.js.map

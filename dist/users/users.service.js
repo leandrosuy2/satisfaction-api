@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const user_entity_1 = require("./entities/user.entity");
+const access_profile_enum_1 = require("./enums/access-profile.enum");
 const bcrypt = require("bcryptjs");
 let UsersService = class UsersService {
     constructor(userRepository) {
@@ -28,6 +29,7 @@ let UsersService = class UsersService {
             ...createUserDto,
             password: hashedPassword,
             date_acs: new Date(),
+            perfil_acesso: createUserDto.perfil_acesso || access_profile_enum_1.AccessProfile.CLIENTE,
         });
         return this.userRepository.save(user);
     }
@@ -55,6 +57,43 @@ let UsersService = class UsersService {
     async remove(id) {
         const user = await this.findOne(id);
         user.status = false;
+        return this.userRepository.save(user);
+    }
+    async getProfile(id) {
+        const user = await this.userRepository.findOne({
+            where: { id, status: true },
+            select: ['id', 'nome', 'username', 'email', 'telcel', 'setor', 'perfil_acesso', 'empresas', 'image'],
+        });
+        if (!user) {
+            throw new common_1.NotFoundException(`User with ID ${id} not found`);
+        }
+        return user;
+    }
+    async updateProfile(id, updateProfileDto) {
+        const user = await this.userRepository.findOne({
+            where: { id, status: true },
+        });
+        if (!user) {
+            throw new common_1.NotFoundException(`User with ID ${id} not found`);
+        }
+        if (updateProfileDto.perfil_acesso) {
+            user.perfil_acesso = updateProfileDto.perfil_acesso;
+        }
+        Object.assign(user, updateProfileDto);
+        return this.userRepository.save(user);
+    }
+    async updatePassword(id, oldPassword, newPassword) {
+        const user = await this.userRepository.findOne({
+            where: { id, status: true },
+        });
+        if (!user) {
+            throw new common_1.NotFoundException(`User with ID ${id} not found`);
+        }
+        const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
+        if (!isPasswordValid) {
+            throw new Error('Senha atual incorreta');
+        }
+        user.password = await bcrypt.hash(newPassword, 10);
         return this.userRepository.save(user);
     }
 };

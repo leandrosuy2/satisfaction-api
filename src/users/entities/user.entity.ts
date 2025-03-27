@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinTable } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { Company } from '../../companies/entities/company.entity';
+import { AccessProfile } from '../enums/access-profile.enum';
 
 @Entity('users')
 export class User {
@@ -25,7 +26,7 @@ export class User {
   image: string;
 
   @ApiProperty()
-  @Column({ nullable: true })
+  @Column({ unique: true })
   email: string;
 
   @ApiProperty()
@@ -33,7 +34,7 @@ export class User {
   telcel: string;
 
   @ApiProperty()
-  @Column()
+  @Column({ nullable: true })
   id_perfil: string;
 
   @ApiProperty()
@@ -41,7 +42,7 @@ export class User {
   setor: string;
 
   @ApiProperty()
-  @Column()
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   date_acs: Date;
 
   @ApiProperty()
@@ -49,11 +50,15 @@ export class User {
   status: boolean;
 
   @ApiProperty()
-  @Column('jsonb', { default: [] })
-  perfil_acesso: { nome: string; status: boolean }[];
+  @Column({
+    type: 'enum',
+    enum: AccessProfile,
+    default: AccessProfile.CLIENTE
+  })
+  perfil_acesso: AccessProfile;
 
   @ApiProperty()
-  @Column('jsonb', { default: [] })
+  @Column('jsonb', { nullable: true })
   empresas: { id_empresa: string; nome_empresa: string; status: boolean }[];
 
   @ManyToMany(() => Company)

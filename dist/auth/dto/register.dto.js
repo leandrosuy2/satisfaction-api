@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.RegisterDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
+const access_profile_enum_1 = require("../../users/enums/access-profile.enum");
 class RegisterDto {
 }
 exports.RegisterDto = RegisterDto;
@@ -36,14 +37,14 @@ __decorate([
 ], RegisterDto.prototype, "nome", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
+    (0, class_validator_1.IsEmail)(),
     (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], RegisterDto.prototype, "id_perfil", void 0);
+], RegisterDto.prototype, "email", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)(),
-    (0, class_validator_1.IsArray)(),
-    __metadata("design:type", Array)
+    (0, swagger_1.ApiProperty)({ enum: access_profile_enum_1.AccessProfile, default: access_profile_enum_1.AccessProfile.CLIENTE }),
+    (0, class_validator_1.IsEnum)(access_profile_enum_1.AccessProfile),
+    __metadata("design:type", String)
 ], RegisterDto.prototype, "perfil_acesso", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
@@ -61,12 +62,6 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], RegisterDto.prototype, "email", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ required: false }),
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
 ], RegisterDto.prototype, "telcel", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ required: false }),
@@ -74,4 +69,10 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], RegisterDto.prototype, "setor", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], RegisterDto.prototype, "cargo", void 0);
 //# sourceMappingURL=register.dto.js.map

@@ -13,54 +13,63 @@ exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
 const users_service_1 = require("../users/users.service");
+const access_profile_enum_1 = require("../users/enums/access-profile.enum");
 const bcrypt = require("bcryptjs");
 let AuthService = class AuthService {
     constructor(usersService, jwtService) {
         this.usersService = usersService;
         this.jwtService = jwtService;
     }
-    async register(registerDto) {
-        const existingUser = await this.usersService.findByUsername(registerDto.username);
-        if (existingUser) {
-            throw new common_1.ConflictException('Username already exists');
+    async validateUser(username, password) {
+        const user = await this.usersService.findByUsername(username);
+        if (user && await bcrypt.compare(password, user.password)) {
+            const { password, ...result } = user;
+            return result;
         }
+        return null;
+    }
+    async register(registerDto) {
         const user = await this.usersService.create({
             ...registerDto,
             password: registerDto.password,
+            perfil_acesso: registerDto.perfil_acesso || access_profile_enum_1.AccessProfile.CLIENTE,
         });
-        const payload = {
-            sub: user.id,
-            username: user.username,
-            role: user.perfil_acesso[0]?.nome
-        };
+        const payload = { username: user.username, sub: user.id };
         return {
             access_token: this.jwtService.sign(payload),
             user: {
                 id: user.id,
                 username: user.username,
                 nome: user.nome,
-                perfil: user.perfil_acesso[0]?.nome,
-            },
+                email: user.email,
+                perfil_acesso: user.perfil_acesso,
+            }
         };
     }
-    async login(loginDto) {
-        const user = await this.usersService.findByUsername(loginDto.username);
-        if (!user || !await bcrypt.compare(loginDto.password, user.password)) {
-            throw new common_1.UnauthorizedException('Invalid credentials');
-        }
-        const payload = {
-            sub: user.id,
-            username: user.username,
-            role: user.perfil_acesso[0]?.nome
-        };
+    async login(user) {
+        const payload = { username: user.username, sub: user.id };
         return {
             access_token: this.jwtService.sign(payload),
             user: {
                 id: user.id,
                 username: user.username,
                 nome: user.nome,
-                perfil: user.perfil_acesso[0]?.nome,
-            },
+                email: user.email,
+                perfil_acesso: user.perfil_acesso,
+            }
+        };
+    }
+    async refreshToken(user) {
+        const payload = { username: user.username, sub: user.id };
+        return {
+            access_token: this.jwtService.sign(payload),
+            user: {
+                id: user.id,
+                username: user.username,
+                nome: user.nome,
+                email: user.email,
+                perfil_acesso: user.perfil_acesso,
+            }
         };
     }
 };

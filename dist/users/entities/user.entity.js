@@ -13,6 +13,7 @@ exports.User = void 0;
 const typeorm_1 = require("typeorm");
 const swagger_1 = require("@nestjs/swagger");
 const company_entity_1 = require("../../companies/entities/company.entity");
+const access_profile_enum_1 = require("../enums/access-profile.enum");
 let User = class User {
 };
 exports.User = User;
@@ -43,7 +44,7 @@ __decorate([
 ], User.prototype, "image", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
-    (0, typeorm_1.Column)({ nullable: true }),
+    (0, typeorm_1.Column)({ unique: true }),
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);
 __decorate([
@@ -53,7 +54,7 @@ __decorate([
 ], User.prototype, "telcel", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], User.prototype, "id_perfil", void 0);
 __decorate([
@@ -63,7 +64,7 @@ __decorate([
 ], User.prototype, "setor", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' }),
     __metadata("design:type", Date)
 ], User.prototype, "date_acs", void 0);
 __decorate([
@@ -73,12 +74,16 @@ __decorate([
 ], User.prototype, "status", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
-    (0, typeorm_1.Column)('jsonb', { default: [] }),
-    __metadata("design:type", Array)
+    (0, typeorm_1.Column)({
+        type: 'enum',
+        enum: access_profile_enum_1.AccessProfile,
+        default: access_profile_enum_1.AccessProfile.CLIENTE
+    }),
+    __metadata("design:type", String)
 ], User.prototype, "perfil_acesso", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
-    (0, typeorm_1.Column)('jsonb', { default: [] }),
+    (0, typeorm_1.Column)('jsonb', { nullable: true }),
     __metadata("design:type", Array)
 ], User.prototype, "empresas", void 0);
 __decorate([

@@ -1,27 +1,40 @@
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
-import { LoginDto } from './dto/login.dto';
-import { RegisterDto } from './dto/register.dto';
+import { CreateUserDto } from '../users/dto/create-user.dto';
+import { AccessProfile } from '../users/enums/access-profile.enum';
 export declare class AuthService {
     private usersService;
     private jwtService;
     constructor(usersService: UsersService, jwtService: JwtService);
-    register(registerDto: RegisterDto): Promise<{
+    validateUser(username: string, password: string): Promise<any>;
+    register(registerDto: CreateUserDto): Promise<{
         access_token: string;
         user: {
             id: string;
             username: string;
             nome: string;
-            perfil: string;
+            email: string;
+            perfil_acesso: AccessProfile;
         };
     }>;
-    login(loginDto: LoginDto): Promise<{
+    login(user: any): Promise<{
         access_token: string;
         user: {
-            id: string;
-            username: string;
-            nome: string;
-            perfil: string;
+            id: any;
+            username: any;
+            nome: any;
+            email: any;
+            perfil_acesso: any;
+        };
+    }>;
+    refreshToken(user: any): Promise<{
+        access_token: string;
+        user: {
+            id: any;
+            username: any;
+            nome: any;
+            email: any;
+            perfil_acesso: any;
         };
     }>;
 }

@@ -1,6 +1,7 @@
 import { AuthService } from './auth.service';
-import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { LoginDto } from './dto/login.dto';
+import { Request } from 'express';
 export declare class AuthController {
     private readonly authService;
     constructor(authService: AuthService);
@@ -10,16 +11,28 @@ export declare class AuthController {
             id: string;
             username: string;
             nome: string;
-            perfil: string;
+            email: string;
+            perfil_acesso: import("../users/enums/access-profile.enum").AccessProfile;
         };
     }>;
     login(loginDto: LoginDto): Promise<{
         access_token: string;
         user: {
-            id: string;
-            username: string;
-            nome: string;
-            perfil: string;
+            id: any;
+            username: any;
+            nome: any;
+            email: any;
+            perfil_acesso: any;
+        };
+    }>;
+    refreshToken(req: Request): Promise<{
+        access_token: string;
+        user: {
+            id: any;
+            username: any;
+            nome: any;
+            email: any;
+            perfil_acesso: any;
         };
     }>;
 }
