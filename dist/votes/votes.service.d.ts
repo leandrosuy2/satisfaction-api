@@ -3,10 +3,16 @@ import { Vote } from './entities/vote.entity';
 import { CreateVoteDto } from './dto/create-vote.dto';
 import { VotesGateway } from './votes.gateway';
 import { RatingType } from './enums/rating-type.enum';
+import { ServiceType } from '../service-types/entities/service-type.entity';
+import { ServiceTypesService } from '../service-types/service-types.service';
+import { Company } from '../companies/entities/company.entity';
 export declare class VotesService {
     private voteRepository;
+    private serviceTypeRepository;
+    private serviceTypesService;
     private votesGateway;
-    constructor(voteRepository: Repository<Vote>, votesGateway: VotesGateway);
+    private companyRepository;
+    constructor(voteRepository: Repository<Vote>, serviceTypeRepository: Repository<ServiceType>, serviceTypesService: ServiceTypesService, votesGateway: VotesGateway, companyRepository: Repository<Company>);
     create(createVoteDto: CreateVoteDto): Promise<Vote>;
     findAll(): Promise<Vote[]>;
     findOne(id_voto: string): Promise<Vote>;
@@ -17,12 +23,7 @@ export declare class VotesService {
         totalVotes: number;
         avaliacoesPorTipo: Record<RatingType, number>;
         percentuaisPorTipo: Record<RatingType, number>;
-        votesByService: Record<string, {
-            total: number;
-            avaliacoes: Record<RatingType, number>;
-            percentuais: Record<RatingType, number>;
-            votes: Vote[];
-        }>;
+        votesByService: any;
         recentVotes: Vote[];
     }>;
 }

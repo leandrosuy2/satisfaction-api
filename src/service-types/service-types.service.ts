@@ -12,9 +12,15 @@ export class ServiceTypesService {
     private serviceTypeRepository: Repository<ServiceType>,
   ) {}
 
-  create(createServiceTypeDto: CreateServiceTypeDto) {
-    const serviceType = this.serviceTypeRepository.create(createServiceTypeDto);
-    return this.serviceTypeRepository.save(serviceType);
+  async create(createServiceTypeDto: CreateServiceTypeDto) {
+    console.log('Criando serviço:', createServiceTypeDto);
+    const serviceType = this.serviceTypeRepository.create({
+      ...createServiceTypeDto,
+      status: true
+    });
+    const savedService = await this.serviceTypeRepository.save(serviceType);
+    console.log('Serviço criado:', savedService);
+    return savedService;
   }
 
   findAll() {
@@ -25,7 +31,10 @@ export class ServiceTypesService {
 
   async findOne(id: string) {
     const serviceType = await this.serviceTypeRepository.findOne({
-      where: { id, status: true },
+      where: [
+        { id, status: true },
+        { tipo_servico: id, status: true }
+      ],
     });
 
     if (!serviceType) {
@@ -45,5 +54,14 @@ export class ServiceTypesService {
     const serviceType = await this.findOne(id);
     serviceType.status = false;
     return this.serviceTypeRepository.save(serviceType);
+  }
+
+  async findAllActive() {
+    const services = await this.serviceTypeRepository.find({
+      where: { status: true },
+      select: ['id', 'nome', 'tipo_servico', 'hora_inicio', 'hora_final']
+    });
+    console.log('Serviços ativos:', services);
+    return services;
   }
 }

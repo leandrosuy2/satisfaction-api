@@ -5,13 +5,21 @@ import { Vote } from './entities/vote.entity';
 import { CreateVoteDto } from './dto/create-vote.dto';
 import { VotesGateway } from './votes.gateway';
 import { RatingType } from './enums/rating-type.enum';
+import { ServiceType } from '../service-types/entities/service-type.entity';
+import { ServiceTypesService } from '../service-types/service-types.service';
+import { Company } from '../companies/entities/company.entity';
 
 @Injectable()
 export class VotesService {
   constructor(
     @InjectRepository(Vote)
     private voteRepository: Repository<Vote>,
+    @InjectRepository(ServiceType)
+    private serviceTypeRepository: Repository<ServiceType>,
+    private serviceTypesService: ServiceTypesService,
     private votesGateway: VotesGateway,
+    @InjectRepository(Company)
+    private companyRepository: Repository<Company>,
   ) {}
 
   async create(createVoteDto: CreateVoteDto) {
@@ -84,40 +92,69 @@ export class VotesService {
       return acc;
     }, {} as Record<RatingType, number>);
 
+    // Buscar a empresa com seus serviços
+    const company = await this.companyRepository.findOne({
+      where: { id: companyId },
+      relations: ['servicos']
+    });
+
+    const serviceMap = new Map(company.servicos.map(service => [service.id, service]));
+
     // Análise por tipo de serviço
-    const votesByService = votes.reduce((acc, vote) => {
-      const serviceName = vote.id_tipo_servico || 'Sem serviço';
-      if (!acc[serviceName]) {
-        acc[serviceName] = {
-          total: 0,
-          avaliacoes: Object.values(RatingType).reduce((a, tipo) => {
-            a[tipo] = 0;
-            return a;
-          }, {} as Record<RatingType, number>),
-          percentuais: Object.values(RatingType).reduce((a, tipo) => {
-            a[tipo] = 0;
-            return a;
-          }, {} as Record<RatingType, number>),
-          votes: [],
-        };
-      }
-      
-      acc[serviceName].total++;
-      acc[serviceName].avaliacoes[vote.avaliacao]++;
-      
-      // Calcular percentuais para este serviço
-      Object.entries(acc[serviceName].avaliacoes).forEach(([tipo, quantidade]: [RatingType, number]) => {
-        acc[serviceName].percentuais[tipo] = (quantidade / acc[serviceName].total) * 100;
-      });
-      
-      acc[serviceName].votes.push(vote);
-      return acc;
-    }, {} as Record<string, {
-      total: number;
-      avaliacoes: Record<RatingType, number>;
-      percentuais: Record<RatingType, number>;
-      votes: Vote[];
-    }>);
+    const votesByService = await Promise.all(
+      Object.entries(
+        votes.reduce((acc, vote) => {
+          const serviceName = vote.id_tipo_servico || 'Sem serviço';
+          if (!acc[serviceName]) {
+            acc[serviceName] = {
+              total: 0,
+              avaliacoes: Object.values(RatingType).reduce((a, tipo) => {
+                a[tipo] = 0;
+                return a;
+              }, {} as Record<RatingType, number>),
+              percentuais: Object.values(RatingType).reduce((a, tipo) => {
+                a[tipo] = 0;
+                return a;
+              }, {} as Record<RatingType, number>),
+              votes: [],
+              serviceInfo: null,
+            };
+          }
+          
+          acc[serviceName].total++;
+          acc[serviceName].avaliacoes[vote.avaliacao]++;
+          
+          // Calcular percentuais para este serviço
+          Object.entries(acc[serviceName].avaliacoes).forEach(([tipo, quantidade]: [RatingType, number]) => {
+            acc[serviceName].percentuais[tipo] = (quantidade / acc[serviceName].total) * 100;
+          });
+          
+          acc[serviceName].votes.push(vote);
+          return acc;
+        }, {} as Record<string, {
+          total: number;
+          avaliacoes: Record<RatingType, number>;
+          percentuais: Record<RatingType, number>;
+          votes: Vote[];
+          serviceInfo: any;
+        }>)
+      ).map(async ([serviceId, data]) => {
+        if (serviceId !== 'Sem serviço') {
+          const serviceInfo = serviceMap.get(serviceId);
+          if (serviceInfo) {
+            data.serviceInfo = {
+              nome: serviceInfo.nome,
+              tipo_servico: serviceInfo.tipo_servico,
+              hora_inicio: serviceInfo.hora_inicio,
+              hora_final: serviceInfo.hora_final
+            };
+          } else {
+            console.log(`Serviço não encontrado para ID: ${serviceId}`);
+          }
+        }
+        return [serviceId, data];
+      })
+    );
 
     // Votos recentes
     const recentVotes = votes
@@ -128,7 +165,7 @@ export class VotesService {
       totalVotes,
       avaliacoesPorTipo,
       percentuaisPorTipo,
-      votesByService,
+      votesByService: Object.fromEntries(votesByService),
       recentVotes,
     };
   }

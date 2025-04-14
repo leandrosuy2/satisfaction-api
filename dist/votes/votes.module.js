@@ -13,12 +13,20 @@ const votes_controller_1 = require("./votes.controller");
 const vote_entity_1 = require("./entities/vote.entity");
 const votes_service_1 = require("./votes.service");
 const votes_gateway_1 = require("./votes.gateway");
+const service_type_entity_1 = require("../service-types/entities/service-type.entity");
+const service_types_module_1 = require("../service-types/service-types.module");
+const company_entity_1 = require("../companies/entities/company.entity");
+const companies_module_1 = require("../companies/companies.module");
 let VotesModule = class VotesModule {
 };
 exports.VotesModule = VotesModule;
 exports.VotesModule = VotesModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([vote_entity_1.Vote])],
+        imports: [
+            typeorm_1.TypeOrmModule.forFeature([vote_entity_1.Vote, service_type_entity_1.ServiceType, company_entity_1.Company]),
+            service_types_module_1.ServiceTypesModule,
+            companies_module_1.CompaniesModule
+        ],
         controllers: [votes_controller_1.VotesController],
         providers: [votes_service_1.VotesService, votes_gateway_1.VotesGateway],
         exports: [votes_service_1.VotesService, votes_gateway_1.VotesGateway],

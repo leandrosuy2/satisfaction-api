@@ -10,4 +10,5 @@ export declare class ServiceTypesService {
     findOne(id: string): Promise<ServiceType>;
     update(id: string, updateServiceTypeDto: UpdateServiceTypeDto): Promise<ServiceType>;
     remove(id: string): Promise<ServiceType>;
+    findAllActive(): Promise<ServiceType[]>;
 }

@@ -19,10 +19,16 @@ const typeorm_2 = require("typeorm");
 const vote_entity_1 = require("./entities/vote.entity");
 const votes_gateway_1 = require("./votes.gateway");
 const rating_type_enum_1 = require("./enums/rating-type.enum");
+const service_type_entity_1 = require("../service-types/entities/service-type.entity");
+const service_types_service_1 = require("../service-types/service-types.service");
+const company_entity_1 = require("../companies/entities/company.entity");
 let VotesService = class VotesService {
-    constructor(voteRepository, votesGateway) {
+    constructor(voteRepository, serviceTypeRepository, serviceTypesService, votesGateway, companyRepository) {
         this.voteRepository = voteRepository;
+        this.serviceTypeRepository = serviceTypeRepository;
+        this.serviceTypesService = serviceTypesService;
         this.votesGateway = votesGateway;
+        this.companyRepository = companyRepository;
     }
     async create(createVoteDto) {
         const vote = this.voteRepository.create(createVoteDto);
@@ -74,7 +80,12 @@ let VotesService = class VotesService {
             acc[tipo] = totalVotes > 0 ? (quantidade / totalVotes) * 100 : 0;
             return acc;
         }, {});
-        const votesByService = votes.reduce((acc, vote) => {
+        const company = await this.companyRepository.findOne({
+            where: { id: companyId },
+            relations: ['servicos']
+        });
+        const serviceMap = new Map(company.servicos.map(service => [service.id, service]));
+        const votesByService = await Promise.all(Object.entries(votes.reduce((acc, vote) => {
             const serviceName = vote.id_tipo_servico || 'Sem serviço';
             if (!acc[serviceName]) {
                 acc[serviceName] = {
@@ -88,6 +99,7 @@ let VotesService = class VotesService {
                         return a;
                     }, {}),
                     votes: [],
+                    serviceInfo: null,
                 };
             }
             acc[serviceName].total++;
@@ -97,7 +109,23 @@ let VotesService = class VotesService {
             });
             acc[serviceName].votes.push(vote);
             return acc;
-        }, {});
+        }, {})).map(async ([serviceId, data]) => {
+            if (serviceId !== 'Sem serviço') {
+                const serviceInfo = serviceMap.get(serviceId);
+                if (serviceInfo) {
+                    data.serviceInfo = {
+                        nome: serviceInfo.nome,
+                        tipo_servico: serviceInfo.tipo_servico,
+                        hora_inicio: serviceInfo.hora_inicio,
+                        hora_final: serviceInfo.hora_final
+                    };
+                }
+                else {
+                    console.log(`Serviço não encontrado para ID: ${serviceId}`);
+                }
+            }
+            return [serviceId, data];
+        }));
         const recentVotes = votes
             .sort((a, b) => b.momento_voto.getTime() - a.momento_voto.getTime())
             .slice(0, 5);
@@ -105,7 +133,7 @@ let VotesService = class VotesService {
             totalVotes,
             avaliacoesPorTipo,
             percentuaisPorTipo,
-            votesByService,
+            votesByService: Object.fromEntries(votesByService),
             recentVotes,
         };
     }
@@ -114,7 +142,12 @@ exports.VotesService = VotesService;
 exports.VotesService = VotesService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(vote_entity_1.Vote)),
+    __param(1, (0, typeorm_1.InjectRepository)(service_type_entity_1.ServiceType)),
+    __param(4, (0, typeorm_1.InjectRepository)(company_entity_1.Company)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
-        votes_gateway_1.VotesGateway])
+        typeorm_2.Repository,
+        service_types_service_1.ServiceTypesService,
+        votes_gateway_1.VotesGateway,
+        typeorm_2.Repository])
 ], VotesService);
 //# sourceMappingURL=votes.service.js.map

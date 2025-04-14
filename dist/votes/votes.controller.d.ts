@@ -9,12 +9,7 @@ export declare class VotesController {
         totalVotes: number;
         avaliacoesPorTipo: Record<import("./enums/rating-type.enum").RatingType, number>;
         percentuaisPorTipo: Record<import("./enums/rating-type.enum").RatingType, number>;
-        votesByService: Record<string, {
-            total: number;
-            avaliacoes: Record<import("./enums/rating-type.enum").RatingType, number>;
-            percentuais: Record<import("./enums/rating-type.enum").RatingType, number>;
-            votes: import("./entities/vote.entity").Vote[];
-        }>;
+        votesByService: any;
         recentVotes: import("./entities/vote.entity").Vote[];
     }>;
     findOne(id: string): Promise<import("./entities/vote.entity").Vote>;
