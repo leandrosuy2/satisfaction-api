@@ -5,16 +5,9 @@ var Permission;
 (function (Permission) {
     Permission["DASHBOARD"] = "dashboard";
     Permission["GESTAO"] = "gestao";
-    Permission["CADASTROS"] = "cadastros";
-    Permission["AUTORIZACOES"] = "autorizacoes";
-    Permission["DIRETORIA"] = "diretoria";
-    Permission["GERENTE"] = "gerente";
-    Permission["CLIENTE"] = "cliente";
-    Permission["PESQUISAS"] = "pesquisas";
-    Permission["PESQUISAS_POR_SERVICO"] = "pesquisas_por_servico";
+    Permission["CADASTROS_COMPANIES"] = "cadastros_companies";
+    Permission["CADASTROS_SERVICE_TYPES"] = "cadastros_service_types";
+    Permission["PESQUISAS_VOTES"] = "pesquisas_votes";
+    Permission["AUTORIZACOES_USERS"] = "autorizacoes_users";
     Permission["RELATORIOS"] = "relatorios";
-    Permission["RELATORIO_DIARIO"] = "relatorio_diario";
-    Permission["RELATORIO_MENSAL"] = "relatorio_mensal";
-    Permission["INSTALL_APP_MOBILE"] = "install_app_mobile";
 })(Permission || (exports.Permission = Permission = {}));
-//# sourceMappingURL=permission.enum.js.map
