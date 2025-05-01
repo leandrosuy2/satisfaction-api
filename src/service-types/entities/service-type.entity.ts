@@ -9,23 +9,7 @@ export class ServiceType {
 
   @ApiProperty()
   @Column()
-  id_empresa: string;
-
-  @ApiProperty()
-  @Column()
-  tipo_servico: string;
-
-  @ApiProperty()
-  @Column()
   nome: string;
-
-  @ApiProperty()
-  @Column()
-  hora_inicio: string;
-
-  @ApiProperty()
-  @Column()
-  hora_final: string;
 
   @ApiProperty()
   @Column({ default: true })
@@ -36,12 +20,12 @@ export class ServiceType {
   user_add: string;
 
   @ApiProperty()
-  @CreateDateColumn()
-  date_add: Date;
+  @Column()
+  user_edt: string;
 
   @ApiProperty()
   @CreateDateColumn()
-  created_at: Date;
+  date_add: Date;
 
   @ApiProperty()
   @UpdateDateColumn()

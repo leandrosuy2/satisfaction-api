@@ -24,27 +24,7 @@ __decorate([
     (0, swagger_1.ApiProperty)(),
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
-], ServiceType.prototype, "id_empresa", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)(),
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
-], ServiceType.prototype, "tipo_servico", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)(),
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
 ], ServiceType.prototype, "nome", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)(),
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
-], ServiceType.prototype, "hora_inicio", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)(),
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
-], ServiceType.prototype, "hora_final", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
     (0, typeorm_1.Column)({ default: true }),
@@ -57,14 +37,14 @@ __decorate([
 ], ServiceType.prototype, "user_add", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
-    (0, typeorm_1.CreateDateColumn)(),
-    __metadata("design:type", Date)
-], ServiceType.prototype, "date_add", void 0);
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], ServiceType.prototype, "user_edt", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
     (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", Date)
-], ServiceType.prototype, "created_at", void 0);
+], ServiceType.prototype, "date_add", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
     (0, typeorm_1.UpdateDateColumn)(),
