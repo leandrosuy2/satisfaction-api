@@ -67,6 +67,10 @@ let CompaniesController = class CompaniesController {
     removeUser(id, userId) {
         return this.companiesService.removeUser(id, userId);
     }
+    getMyCompanies(req) {
+        const userId = req.user?.id;
+        return this.companiesService.findByUser(userId);
+    }
 };
 exports.CompaniesController = CompaniesController;
 __decorate([
@@ -187,6 +191,15 @@ __decorate([
     __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", void 0)
 ], CompaniesController.prototype, "removeUser", null);
+__decorate([
+    (0, common_1.Get)('my/my'),
+    (0, swagger_1.ApiOperation)({ summary: 'Get companies of the authenticated user' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Companies linked to the user returned successfully' }),
+    __param(0, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], CompaniesController.prototype, "getMyCompanies", null);
 exports.CompaniesController = CompaniesController = __decorate([
     (0, swagger_1.ApiTags)('companies'),
     (0, swagger_1.ApiBearerAuth)(),

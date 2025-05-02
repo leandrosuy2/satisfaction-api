@@ -22,4 +22,5 @@ export declare class CompaniesController {
     removeService(id: string, serviceId: string): Promise<import("./entities/company-service.entity").CompanyService>;
     addUser(id: string, userId: string): Promise<import("./entities/company.entity").Company>;
     removeUser(id: string, userId: string): Promise<import("./entities/company.entity").Company>;
+    getMyCompanies(req: any): Promise<import("./entities/company.entity").Company[]>;
 }

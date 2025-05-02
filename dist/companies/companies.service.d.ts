@@ -20,4 +20,5 @@ export declare class CompaniesService {
     removeService(id: string, serviceId: string): Promise<CompanyService>;
     addUser(companyId: string, userId: string): Promise<Company>;
     removeUser(companyId: string, userId: string): Promise<Company>;
+    findByUser(userId: string): Promise<Company[]>;
 }

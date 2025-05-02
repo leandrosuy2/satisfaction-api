@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Put, Request } from '@nestjs/common';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { CreateCompanyServiceDto } from './dto/create-company-service.dto';
@@ -13,7 +13,7 @@ import { LineType } from './enums/line-type.enum';
 @UseGuards(JwtAuthGuard)
 @Controller('companies')
 export class CompaniesController {
-  constructor(private readonly companiesService: CompaniesService) {}
+  constructor(private readonly companiesService: CompaniesService) { }
 
   @Post()
   @ApiOperation({ summary: 'Create a new company' })
@@ -39,8 +39,8 @@ export class CompaniesController {
 
   @Get('lines')
   @ApiOperation({ summary: 'Get available line types' })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Return available line types',
     schema: {
       type: 'array',
@@ -117,5 +117,13 @@ export class CompaniesController {
   @ApiResponse({ status: 200, description: 'User successfully removed from company' })
   removeUser(@Param('id') id: string, @Param('userId') userId: string) {
     return this.companiesService.removeUser(id, userId);
+  }
+
+  @Get('my/my')
+  @ApiOperation({ summary: 'Get companies of the authenticated user' })
+  @ApiResponse({ status: 200, description: 'Companies linked to the user returned successfully' })
+  getMyCompanies(@Request() req) {
+    const userId = req.user?.id; // ou req.user?.sub dependendo da sua strategy
+    return this.companiesService.findByUser(userId);
   }
 }

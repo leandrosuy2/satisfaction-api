@@ -15,7 +15,7 @@ export class CompaniesService {
     private companyRepository: Repository<Company>,
     @InjectRepository(CompanyService)
     private companyServiceRepository: Repository<CompanyService>,
-  ) {}
+  ) { }
 
   create(createCompanyDto: CreateCompanyDto) {
     const company = this.companyRepository.create(createCompanyDto);
@@ -107,5 +107,20 @@ export class CompaniesService {
     const company = await this.findOne(companyId);
     company.usuarios = company.usuarios.filter(user => user.id !== userId);
     return this.companyRepository.save(company);
+  }
+  async findByUser(userId: string) {
+    try {
+      console.log('🔍 Buscando empresas do userId:', userId);
+
+      return await this.companyRepository
+        .createQueryBuilder('company')
+        .innerJoin('company.usuarios', 'user')
+        .leftJoinAndSelect('company.servicos', 'servicos')
+        .where('user.id = :userId', { userId })
+        .getMany();
+    } catch (error) {
+      console.error('❌ Erro ao buscar empresas por usuário:', error);
+      throw error;
+    }
   }
 }

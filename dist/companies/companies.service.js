@@ -98,6 +98,21 @@ let CompaniesService = class CompaniesService {
         company.usuarios = company.usuarios.filter(user => user.id !== userId);
         return this.companyRepository.save(company);
     }
+    async findByUser(userId) {
+        try {
+            console.log('🔍 Buscando empresas do userId:', userId);
+            return await this.companyRepository
+                .createQueryBuilder('company')
+                .innerJoin('company.usuarios', 'user')
+                .leftJoinAndSelect('company.servicos', 'servicos')
+                .where('user.id = :userId', { userId })
+                .getMany();
+        }
+        catch (error) {
+            console.error('❌ Erro ao buscar empresas por usuário:', error);
+            throw error;
+        }
+    }
 };
 exports.CompaniesService = CompaniesService;
 exports.CompaniesService = CompaniesService = __decorate([
