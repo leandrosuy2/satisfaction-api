@@ -45,4 +45,15 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateVoteDto.prototype, "comentario", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'Linha consumida pelo usuário',
+        required: false,
+        maxLength: 20
+    }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.MaxLength)(20),
+    __metadata("design:type", String)
+], CreateVoteDto.prototype, "linha", void 0);
 //# sourceMappingURL=create-vote.dto.js.map

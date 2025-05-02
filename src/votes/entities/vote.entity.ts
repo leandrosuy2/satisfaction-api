@@ -21,7 +21,7 @@ export class Vote {
     enum: RatingType,
     default: RatingType.REGULAR
   })
-  @ApiProperty({ 
+  @ApiProperty({
     description: 'Avaliação do serviço',
     enum: RatingType,
     example: RatingType.OTIMO
@@ -35,6 +35,10 @@ export class Vote {
   @Column({ default: true })
   @ApiProperty({ description: 'Status do voto (ativo/inativo)' })
   status: boolean;
+
+  @Column({ length: 20, nullable: true })
+  @ApiProperty({ description: 'Linha consumida pelo usuário (opcional)', maxLength: 20 })
+  linha?: string;
 
   @CreateDateColumn()
   @ApiProperty({ description: 'Data de criação do voto' })

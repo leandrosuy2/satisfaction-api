@@ -4,4 +4,5 @@ export declare class CreateVoteDto {
     id_tipo_servico?: string;
     avaliacao: RatingType;
     comentario?: string;
+    linha?: string;
 }

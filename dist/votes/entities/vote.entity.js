@@ -55,6 +55,11 @@ __decorate([
     __metadata("design:type", Boolean)
 ], Vote.prototype, "status", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ length: 20, nullable: true }),
+    (0, swagger_1.ApiProperty)({ description: 'Linha consumida pelo usuário (opcional)', maxLength: 20 }),
+    __metadata("design:type", String)
+], Vote.prototype, "linha", void 0);
+__decorate([
     (0, typeorm_1.CreateDateColumn)(),
     (0, swagger_1.ApiProperty)({ description: 'Data de criação do voto' }),
     __metadata("design:type", Date)

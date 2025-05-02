@@ -20,16 +20,16 @@ export class VotesService {
     private votesGateway: VotesGateway,
     @InjectRepository(Company)
     private companyRepository: Repository<Company>,
-  ) {}
+  ) { }
 
   async create(createVoteDto: CreateVoteDto) {
     const vote = this.voteRepository.create(createVoteDto);
     const savedVote = await this.voteRepository.save(vote);
-    
+
     // Send WebSocket update
     const analytics = await this.getAnalytics(createVoteDto.id_empresa);
     await this.votesGateway.broadcastVoteUpdate(createVoteDto.id_empresa, analytics);
-    
+
     return savedVote;
   }
 
@@ -65,11 +65,11 @@ export class VotesService {
     const vote = await this.findOne(id_voto);
     vote.status = false;
     const updatedVote = await this.voteRepository.save(vote);
-    
+
     // Send WebSocket update
     const analytics = await this.getAnalytics(vote.id_empresa);
     await this.votesGateway.broadcastVoteUpdate(vote.id_empresa, analytics);
-    
+
     return updatedVote;
   }
 
@@ -120,15 +120,15 @@ export class VotesService {
               serviceInfo: null,
             };
           }
-          
+
           acc[serviceName].total++;
           acc[serviceName].avaliacoes[vote.avaliacao]++;
-          
+
           // Calcular percentuais para este serviço
           Object.entries(acc[serviceName].avaliacoes).forEach(([tipo, quantidade]: [RatingType, number]) => {
             acc[serviceName].percentuais[tipo] = (quantidade / acc[serviceName].total) * 100;
           });
-          
+
           acc[serviceName].votes.push(vote);
           return acc;
         }, {} as Record<string, {

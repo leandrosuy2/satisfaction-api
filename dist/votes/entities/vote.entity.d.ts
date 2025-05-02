@@ -6,6 +6,7 @@ export declare class Vote {
     avaliacao: RatingType;
     comentario?: string;
     status: boolean;
+    linha?: string;
     momento_voto: Date;
     updated_at: Date;
 }

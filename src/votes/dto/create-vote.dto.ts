@@ -1,4 +1,4 @@
-import { IsString, IsEnum, IsOptional } from 'class-validator';
+import { IsString, IsEnum, IsOptional, MaxLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { RatingType } from '../enums/rating-type.enum';
 
@@ -12,7 +12,7 @@ export class CreateVoteDto {
   @IsString()
   id_tipo_servico?: string;
 
-  @ApiProperty({ 
+  @ApiProperty({
     description: 'Avaliação do serviço',
     enum: RatingType,
     example: RatingType.OTIMO
@@ -20,11 +20,21 @@ export class CreateVoteDto {
   @IsEnum(RatingType)
   avaliacao: RatingType;
 
-  @ApiProperty({ 
+  @ApiProperty({
     description: 'Comentário opcional sobre o voto',
-    required: false 
+    required: false
   })
   @IsOptional()
   @IsString()
   comentario?: string;
-} 
+
+  @ApiProperty({
+    description: 'Linha consumida pelo usuário',
+    required: false,
+    maxLength: 20
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(20)
+  linha?: string;
+}
