@@ -37,6 +37,10 @@ export class CompanyService {
   user_add: string;
 
   @ApiProperty()
+  @Column({ type: 'int', default: 0 })
+  qtd_ref: number;
+
+  @ApiProperty()
   @CreateDateColumn()
   date_add: Date;
 

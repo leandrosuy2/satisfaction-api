@@ -45,4 +45,11 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], CreateCompanyServiceDto.prototype, "user_add", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false, default: 0 }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsInt)(),
+    (0, class_validator_1.Min)(0),
+    __metadata("design:type", Number)
+], CreateCompanyServiceDto.prototype, "qtd_ref", void 0);
 //# sourceMappingURL=create-company-service.dto.js.map

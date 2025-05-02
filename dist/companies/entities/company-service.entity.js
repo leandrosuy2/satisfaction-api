@@ -58,6 +58,11 @@ __decorate([
 ], CompanyService.prototype, "user_add", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
+    (0, typeorm_1.Column)({ type: 'int', default: 0 }),
+    __metadata("design:type", Number)
+], CompanyService.prototype, "qtd_ref", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
     (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", Date)
 ], CompanyService.prototype, "date_add", void 0);

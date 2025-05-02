@@ -4,4 +4,5 @@ export declare class CreateCompanyServiceDto {
     hora_inicio: string;
     hora_final: string;
     user_add: string;
+    qtd_ref?: number;
 }

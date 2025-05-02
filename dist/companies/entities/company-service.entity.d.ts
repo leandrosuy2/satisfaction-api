@@ -8,6 +8,7 @@ export declare class CompanyService {
     hora_final: string;
     status: boolean;
     user_add: string;
+    qtd_ref: number;
     date_add: Date;
     company: Company;
 }

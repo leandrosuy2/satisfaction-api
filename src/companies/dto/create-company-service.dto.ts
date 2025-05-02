@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString, IsInt, IsOptional, Min } from 'class-validator';
 
 export class CreateCompanyServiceDto {
   @ApiProperty()
@@ -26,4 +26,10 @@ export class CreateCompanyServiceDto {
   @IsNotEmpty()
   @IsString()
   user_add: string;
+
+  @ApiProperty({ required: false, default: 0 })
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  qtd_ref?: number;
 }
