@@ -37,8 +37,14 @@ let VotesService = class VotesService {
         await this.votesGateway.broadcastVoteUpdate(createVoteDto.id_empresa, analytics);
         return savedVote;
     }
-    findAll() {
-        return this.voteRepository.find();
+    async findAll() {
+        const startOfDay = new Date();
+        startOfDay.setHours(0, 0, 0, 0);
+        return this.voteRepository.createQueryBuilder('vote')
+            .where('vote.momento_voto >= :startOfDay', { startOfDay })
+            .andWhere('vote.status = true')
+            .orderBy('vote.momento_voto', 'DESC')
+            .getMany();
     }
     async findOne(id_voto) {
         const vote = await this.voteRepository.findOne({
