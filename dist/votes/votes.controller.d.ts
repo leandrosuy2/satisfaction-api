@@ -5,12 +5,13 @@ export declare class VotesController {
     constructor(votesService: VotesService);
     create(createVoteDto: CreateVoteDto): Promise<import("./entities/vote.entity").Vote>;
     findAll(): Promise<import("./entities/vote.entity").Vote[]>;
-    getAnalytics(companyId: string): Promise<{
+    getAnalytics(companyId: string, startDate?: string, endDate?: string): Promise<{
         totalVotes: number;
         avaliacoesPorTipo: Record<import("./enums/rating-type.enum").RatingType, number>;
         percentuaisPorTipo: Record<import("./enums/rating-type.enum").RatingType, number>;
         votesByService: any;
         recentVotes: import("./entities/vote.entity").Vote[];
+        votesByDay: any[];
     }>;
     findOne(id: string): Promise<import("./entities/vote.entity").Vote>;
     findByEmpresa(id_empresa: string): Promise<import("./entities/vote.entity").Vote[]>;

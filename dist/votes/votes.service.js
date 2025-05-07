@@ -73,10 +73,15 @@ let VotesService = class VotesService {
         await this.votesGateway.broadcastVoteUpdate(vote.id_empresa, analytics);
         return updatedVote;
     }
-    async getAnalytics(companyId) {
-        const votes = await this.voteRepository.find({
-            where: { id_empresa: companyId, status: true }
-        });
+    async getAnalytics(companyId, startDate, endDate) {
+        const where = {
+            id_empresa: companyId,
+            status: true,
+        };
+        if (startDate && endDate) {
+            where.momento_voto = (0, typeorm_2.Between)(new Date(startDate), new Date(endDate));
+        }
+        const votes = await this.voteRepository.find({ where });
         const totalVotes = votes.length;
         const avaliacoesPorTipo = Object.values(rating_type_enum_1.RatingType).reduce((acc, tipo) => {
             acc[tipo] = votes.filter(vote => vote.avaliacao === tipo).length;
@@ -123,11 +128,9 @@ let VotesService = class VotesService {
                         nome: serviceInfo.nome,
                         tipo_servico: serviceInfo.tipo_servico,
                         hora_inicio: serviceInfo.hora_inicio,
-                        hora_final: serviceInfo.hora_final
+                        hora_final: serviceInfo.hora_final,
+                        qtd_ref: serviceInfo.qtd_ref,
                     };
-                }
-                else {
-                    console.log(`Serviço não encontrado para ID: ${serviceId}`);
                 }
             }
             return [serviceId, data];
@@ -135,12 +138,29 @@ let VotesService = class VotesService {
         const recentVotes = votes
             .sort((a, b) => b.momento_voto.getTime() - a.momento_voto.getTime())
             .slice(0, 5);
+        const votesByDay = votes.reduce((acc, vote) => {
+            const data = vote.momento_voto.toISOString().split('T')[0];
+            if (!acc[data]) {
+                acc[data] = {
+                    data,
+                    otimo: 0,
+                    bom: 0,
+                    regular: 0,
+                    ruim: 0,
+                    total: 0
+                };
+            }
+            acc[data][vote.avaliacao.toLowerCase()]++;
+            acc[data].total++;
+            return acc;
+        }, {});
         return {
             totalVotes,
             avaliacoesPorTipo,
             percentuaisPorTipo,
             votesByService: Object.fromEntries(votesByService),
             recentVotes,
+            votesByDay: Object.values(votesByDay),
         };
     }
 };

@@ -28,8 +28,8 @@ let VotesController = class VotesController {
     findAll() {
         return this.votesService.findAll();
     }
-    getAnalytics(companyId) {
-        return this.votesService.getAnalytics(companyId);
+    getAnalytics(companyId, startDate, endDate) {
+        return this.votesService.getAnalytics(companyId, startDate, endDate);
     }
     findOne(id) {
         return this.votesService.findOne(id);
@@ -64,11 +64,11 @@ __decorate([
 ], VotesController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)('analytics/:companyId'),
-    (0, swagger_1.ApiOperation)({ summary: 'Get votes analytics for a company' }),
-    (0, swagger_1.ApiResponse)({ status: 200, description: 'Return votes analytics for the specified company' }),
     __param(0, (0, common_1.Param)('companyId')),
+    __param(1, (0, common_1.Query)('startDate')),
+    __param(2, (0, common_1.Query)('endDate')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, String, String]),
     __metadata("design:returntype", void 0)
 ], VotesController.prototype, "getAnalytics", null);
 __decorate([

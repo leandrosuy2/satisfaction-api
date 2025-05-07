@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, Between } from 'typeorm';
 import { Vote } from './entities/vote.entity';
 import { CreateVoteDto } from './dto/create-vote.dto';
 import { VotesGateway } from './votes.gateway';
@@ -84,26 +84,30 @@ export class VotesService {
     return updatedVote;
   }
 
-  async getAnalytics(companyId: string) {
-    const votes = await this.voteRepository.find({
-      where: { id_empresa: companyId, status: true }
-    });
+  async getAnalytics(companyId: string, startDate?: string, endDate?: string) {
+    const where: any = {
+      id_empresa: companyId,
+      status: true,
+    };
+
+    if (startDate && endDate) {
+      where.momento_voto = Between(new Date(startDate), new Date(endDate));
+    }
+
+    const votes = await this.voteRepository.find({ where });
 
     const totalVotes = votes.length;
 
-    // Contagem por tipo de avaliação
     const avaliacoesPorTipo = Object.values(RatingType).reduce((acc, tipo) => {
       acc[tipo] = votes.filter(vote => vote.avaliacao === tipo).length;
       return acc;
     }, {} as Record<RatingType, number>);
 
-    // Percentual por tipo de avaliação
     const percentuaisPorTipo = Object.entries(avaliacoesPorTipo).reduce((acc, [tipo, quantidade]) => {
       acc[tipo] = totalVotes > 0 ? (quantidade / totalVotes) * 100 : 0;
       return acc;
     }, {} as Record<RatingType, number>);
 
-    // Buscar a empresa com seus serviços
     const company = await this.companyRepository.findOne({
       where: { id: companyId },
       relations: ['servicos']
@@ -111,7 +115,6 @@ export class VotesService {
 
     const serviceMap = new Map(company.servicos.map(service => [service.id, service]));
 
-    // Análise por tipo de serviço
     const votesByService = await Promise.all(
       Object.entries(
         votes.reduce((acc, vote) => {
@@ -135,7 +138,6 @@ export class VotesService {
           acc[serviceName].total++;
           acc[serviceName].avaliacoes[vote.avaliacao]++;
 
-          // Calcular percentuais para este serviço
           Object.entries(acc[serviceName].avaliacoes).forEach(([tipo, quantidade]: [RatingType, number]) => {
             acc[serviceName].percentuais[tipo] = (quantidade / acc[serviceName].total) * 100;
           });
@@ -157,20 +159,36 @@ export class VotesService {
               nome: serviceInfo.nome,
               tipo_servico: serviceInfo.tipo_servico,
               hora_inicio: serviceInfo.hora_inicio,
-              hora_final: serviceInfo.hora_final
+              hora_final: serviceInfo.hora_final,
+              qtd_ref: serviceInfo.qtd_ref,
             };
-          } else {
-            console.log(`Serviço não encontrado para ID: ${serviceId}`);
           }
         }
         return [serviceId, data];
       })
     );
 
-    // Votos recentes
     const recentVotes = votes
       .sort((a, b) => b.momento_voto.getTime() - a.momento_voto.getTime())
       .slice(0, 5);
+
+    // Agrupamento por dia (opcional, se quiser incluir no frontend)
+    const votesByDay = votes.reduce((acc, vote) => {
+      const data = vote.momento_voto.toISOString().split('T')[0]; // yyyy-mm-dd
+      if (!acc[data]) {
+        acc[data] = {
+          data,
+          otimo: 0,
+          bom: 0,
+          regular: 0,
+          ruim: 0,
+          total: 0
+        };
+      }
+      acc[data][vote.avaliacao.toLowerCase()]++;
+      acc[data].total++;
+      return acc;
+    }, {} as Record<string, any>);
 
     return {
       totalVotes,
@@ -178,6 +196,7 @@ export class VotesService {
       percentuaisPorTipo,
       votesByService: Object.fromEntries(votesByService),
       recentVotes,
+      votesByDay: Object.values(votesByDay),
     };
   }
 } 

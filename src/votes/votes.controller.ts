@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, UseGuards, Query } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { CreateVoteDto } from './dto/create-vote.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -9,7 +9,7 @@ import { VotesService } from './votes.service';
 @UseGuards(JwtAuthGuard)
 @Controller('votes')
 export class VotesController {
-  constructor(private readonly votesService: VotesService) {}
+  constructor(private readonly votesService: VotesService) { }
 
   @Post()
   @ApiOperation({ summary: 'Create a new vote' })
@@ -25,11 +25,20 @@ export class VotesController {
     return this.votesService.findAll();
   }
 
+  // @Get('analytics/:companyId')
+  // @ApiOperation({ summary: 'Get votes analytics for a company' })
+  // @ApiResponse({ status: 200, description: 'Return votes analytics for the specified company' })
+  // getAnalytics(@Param('companyId') companyId: string) {
+  //   return this.votesService.getAnalytics(companyId);
+  // }
+
   @Get('analytics/:companyId')
-  @ApiOperation({ summary: 'Get votes analytics for a company' })
-  @ApiResponse({ status: 200, description: 'Return votes analytics for the specified company' })
-  getAnalytics(@Param('companyId') companyId: string) {
-    return this.votesService.getAnalytics(companyId);
+  getAnalytics(
+    @Param('companyId') companyId: string,
+    @Query('startDate') startDate?: string,
+    @Query('endDate') endDate?: string,
+  ) {
+    return this.votesService.getAnalytics(companyId, startDate, endDate);
   }
 
   @Get(':id')

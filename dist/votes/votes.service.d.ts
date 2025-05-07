@@ -19,11 +19,12 @@ export declare class VotesService {
     findByEmpresa(id_empresa: string): Promise<Vote[]>;
     findByTipoServico(id_tipo_servico: string): Promise<Vote[]>;
     remove(id_voto: string): Promise<Vote>;
-    getAnalytics(companyId: string): Promise<{
+    getAnalytics(companyId: string, startDate?: string, endDate?: string): Promise<{
         totalVotes: number;
         avaliacoesPorTipo: Record<RatingType, number>;
         percentuaisPorTipo: Record<RatingType, number>;
         votesByService: any;
         recentVotes: Vote[];
+        votesByDay: any[];
     }>;
 }
