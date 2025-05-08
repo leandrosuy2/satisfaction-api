@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsEmail, IsOptional, IsEnum } from 'class-validator';
+import { IsString, IsEmail, IsOptional, IsEnum, MinLength } from 'class-validator';
 import { AccessProfile } from '../enums/access-profile.enum';
 
 export class UpdateUserDto {
@@ -47,4 +47,9 @@ export class UpdateUserDto {
   @IsOptional()
   @IsString()
   image?: string;
+
+  @IsOptional()
+  @IsString()
+  @MinLength(6)
+  password?: string; // ✅ Adicione isto
 } 

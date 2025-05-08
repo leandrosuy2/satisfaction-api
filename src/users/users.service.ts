@@ -18,7 +18,7 @@ export class UsersService {
     private userRepository: Repository<User>,
     @InjectRepository(UserPermission)
     private userPermissionRepository: Repository<UserPermission>,
-  ) {}
+  ) { }
 
   async create(createUserDto: CreateUserDto) {
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
@@ -28,12 +28,12 @@ export class UsersService {
       date_acs: new Date(),
       perfil_acesso: createUserDto.perfil_acesso || AccessProfile.CLIENTE,
     });
-    
+
     const savedUser = await this.userRepository.save(user);
-    
+
     // Inicializa as permissões do usuário
     await this.initializeUserPermissions(savedUser.id);
-    
+
     return savedUser;
   }
 
@@ -158,6 +158,11 @@ export class UsersService {
       }
     }
 
+    // ✅ Corrigir aqui: aplicar hash se senha foi enviada
+    if (updateUserDto.password) {
+      updateUserDto.password = await bcrypt.hash(updateUserDto.password, 10);
+    }
+
     Object.assign(user, updateUserDto);
     return this.userRepository.save(user);
   }
@@ -202,7 +207,7 @@ export class UsersService {
 
   async initializeUserPermissions(userId: string) {
     const permissions = Object.values(Permission);
-    const userPermissions = permissions.map(permission => 
+    const userPermissions = permissions.map(permission =>
       this.userPermissionRepository.create({
         user_id: userId,
         permission,
