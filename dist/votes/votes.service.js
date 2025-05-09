@@ -171,9 +171,9 @@ exports.VotesService = VotesService = __decorate([
     __param(1, (0, typeorm_1.InjectRepository)(service_type_entity_1.ServiceType)),
     __param(4, (0, typeorm_1.InjectRepository)(company_entity_1.Company)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
-        typeorm_2.Repository,
-        service_types_service_1.ServiceTypesService,
-        votes_gateway_1.VotesGateway,
-        typeorm_2.Repository])
+    typeorm_2.Repository,
+    service_types_service_1.ServiceTypesService,
+    votes_gateway_1.VotesGateway,
+    typeorm_2.Repository])
 ], VotesService);
 //# sourceMappingURL=votes.service.js.map
