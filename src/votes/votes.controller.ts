@@ -32,13 +32,23 @@ export class VotesController {
   //   return this.votesService.getAnalytics(companyId);
   // }
 
+  // @Get('analytics/:companyId')
+  // getAnalytics(
+  //   @Param('companyId') companyId: string,
+  //   @Query('startDate') startDate?: string,
+  //   @Query('endDate') endDate?: string,
+  // ) {
+  //   return this.votesService.getAnalytics(companyId, startDate, endDate);
+  // }
   @Get('analytics/:companyId')
-  getAnalytics(
-    @Param('companyId') companyId: string,
-    @Query('startDate') startDate?: string,
-    @Query('endDate') endDate?: string,
-  ) {
-    return this.votesService.getAnalytics(companyId, startDate, endDate);
+  getAnalytics(@Param('companyId') companyId: string) {
+    const start = new Date();
+    start.setHours(0, 0, 0, 0);
+
+    const end = new Date();
+    end.setHours(23, 59, 59, 999);
+
+    return this.votesService.getAnalytics(companyId, start.toISOString(), end.toISOString());
   }
 
   @Get(':id')
