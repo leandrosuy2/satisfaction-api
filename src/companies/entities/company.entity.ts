@@ -82,7 +82,7 @@ export class Company {
   @Column()
   user_edt: string;
 
-  @ApiProperty({ 
+  @ApiProperty({
     enum: LineType,
     description: 'Tipo de linha da empresa (0: Votação, 1: Tradicional, 2: Leve, 3: Japonesa, 4: Grill, 5: Gourmet)',
     default: LineType.VOTACAO
@@ -120,4 +120,8 @@ export class Company {
   @ApiProperty()
   @UpdateDateColumn()
   updated_at: Date;
+
+  @ApiProperty()
+  @Column({ type: 'int', default: 3 })
+  qtdbutao: number;
 }

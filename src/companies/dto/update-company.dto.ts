@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, IsOptional, IsNumber, IsBoolean } from 'class-validator';
+import { IsNotEmpty, IsString, IsOptional, IsNumber, IsBoolean, IsInt, IsIn } from 'class-validator';
+
 
 export class UpdateCompanyDto {
   @ApiProperty({ required: false })
@@ -76,4 +77,10 @@ export class UpdateCompanyDto {
   @IsOptional()
   @IsString()
   user_edt?: string;
+
+  @ApiProperty({ required: false, enum: [3, 4], default: 3 })
+  @IsOptional()
+  @IsInt()
+  @IsIn([3, 4])
+  qtdbutao?: number;
 } 
