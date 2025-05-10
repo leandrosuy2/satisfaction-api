@@ -26,4 +26,5 @@ export declare class Company {
     usuarios: User[];
     created_at: Date;
     updated_at: Date;
+    qtdbutao: number;
 }

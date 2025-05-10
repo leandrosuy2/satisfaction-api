@@ -157,6 +157,11 @@ __decorate([
     (0, typeorm_1.UpdateDateColumn)(),
     __metadata("design:type", Date)
 ], Company.prototype, "updated_at", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    (0, typeorm_1.Column)({ type: 'int', default: 3 }),
+    __metadata("design:type", Number)
+], Company.prototype, "qtdbutao", void 0);
 exports.Company = Company = __decorate([
     (0, typeorm_1.Entity)('companies')
 ], Company);

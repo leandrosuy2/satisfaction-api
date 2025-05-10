@@ -33,9 +33,5 @@ export class CreateCompanyServiceDto {
   @Min(0)
   qtd_ref?: number;
 
-  @ApiProperty({ required: false, default: 3 })
-  @IsOptional()
-  @IsInt()
-  @Min(0)
-  qtdbutao?: number;
+
 }

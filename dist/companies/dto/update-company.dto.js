@@ -105,4 +105,11 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], UpdateCompanyDto.prototype, "user_edt", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false, enum: [3, 4], default: 3 }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsInt)(),
+    (0, class_validator_1.IsIn)([3, 4]),
+    __metadata("design:type", Number)
+], UpdateCompanyDto.prototype, "qtdbutao", void 0);
 //# sourceMappingURL=update-company.dto.js.map

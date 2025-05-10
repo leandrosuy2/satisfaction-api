@@ -16,4 +16,5 @@ export declare class CreateCompanyDto {
     estado?: string;
     user_edt: string;
     linha: LineType;
+    qtdbutao?: number;
 }

@@ -28,8 +28,12 @@ let VotesController = class VotesController {
     findAll() {
         return this.votesService.findAll();
     }
-    getAnalytics(companyId, startDate, endDate) {
-        return this.votesService.getAnalytics(companyId, startDate, endDate);
+    getAnalytics(companyId) {
+        const start = new Date();
+        start.setHours(0, 0, 0, 0);
+        const end = new Date();
+        end.setHours(23, 59, 59, 999);
+        return this.votesService.getAnalytics(companyId, start.toISOString(), end.toISOString());
     }
     findOne(id) {
         return this.votesService.findOne(id);
@@ -65,10 +69,8 @@ __decorate([
 __decorate([
     (0, common_1.Get)('analytics/:companyId'),
     __param(0, (0, common_1.Param)('companyId')),
-    __param(1, (0, common_1.Query)('startDate')),
-    __param(2, (0, common_1.Query)('endDate')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String, String]),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], VotesController.prototype, "getAnalytics", null);
 __decorate([

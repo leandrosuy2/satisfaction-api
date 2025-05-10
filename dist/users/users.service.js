@@ -134,6 +134,9 @@ let UsersService = class UsersService {
                 throw new Error('Email already exists');
             }
         }
+        if (updateUserDto.password) {
+            updateUserDto.password = await bcrypt.hash(updateUserDto.password, 10);
+        }
         Object.assign(user, updateUserDto);
         return this.userRepository.save(user);
     }

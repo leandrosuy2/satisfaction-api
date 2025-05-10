@@ -115,4 +115,11 @@ __decorate([
     (0, class_validator_1.IsEnum)(line_type_enum_1.LineType),
     __metadata("design:type", Number)
 ], CreateCompanyDto.prototype, "linha", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false, default: 3 }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsInt)(),
+    (0, class_validator_1.Min)(0),
+    __metadata("design:type", Number)
+], CreateCompanyDto.prototype, "qtdbutao", void 0);
 //# sourceMappingURL=create-company.dto.js.map

@@ -14,4 +14,5 @@ export declare class UpdateCompanyDto {
     cidade?: string;
     estado?: string;
     user_edt?: string;
+    qtdbutao?: number;
 }

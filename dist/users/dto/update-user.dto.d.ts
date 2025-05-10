@@ -9,4 +9,5 @@ export declare class UpdateUserDto {
     cargo?: string;
     perfil_acesso?: AccessProfile;
     image?: string;
+    password?: string;
 }

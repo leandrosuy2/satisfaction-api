@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, IsOptional, IsNumber, IsBoolean, IsEnum } from 'class-validator';
+import { IsNotEmpty, IsString, IsOptional, IsNumber, IsBoolean, IsEnum, IsInt, Min } from 'class-validator';
 import { LineType } from '../enums/line-type.enum';
 
 export class CreateCompanyDto {
@@ -78,11 +78,17 @@ export class CreateCompanyDto {
   @IsString()
   user_edt: string;
 
-  @ApiProperty({ 
+  @ApiProperty({
     enum: LineType,
     description: 'Tipo de linha da empresa (0: Votação, 1: Tradicional, 2: Leve, 3: Japonesa, 4: Grill, 5: Gourmet)',
     default: LineType.VOTACAO
   })
   @IsEnum(LineType)
   linha: LineType;
+
+  @ApiProperty({ required: false, default: 3 })
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  qtdbutao?: number;
 }
