@@ -28,6 +28,9 @@ let VotesController = class VotesController {
     findAll() {
         return this.votesService.findAll();
     }
+    getAnalyticsRelatorio(companyId, startDate, endDate) {
+        return this.votesService.getAnalytics(companyId, startDate, endDate);
+    }
     getAnalytics(companyId) {
         const start = new Date();
         start.setHours(0, 0, 0, 0);
@@ -66,6 +69,15 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], VotesController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Get)('analytics_relatorio/:companyId'),
+    __param(0, (0, common_1.Param)('companyId')),
+    __param(1, (0, common_1.Query)('startDate')),
+    __param(2, (0, common_1.Query)('endDate')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String, String]),
+    __metadata("design:returntype", void 0)
+], VotesController.prototype, "getAnalyticsRelatorio", null);
 __decorate([
     (0, common_1.Get)('analytics/:companyId'),
     __param(0, (0, common_1.Param)('companyId')),

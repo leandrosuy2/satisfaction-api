@@ -143,14 +143,14 @@ let VotesService = class VotesService {
             if (!acc[data]) {
                 acc[data] = {
                     data,
-                    otimo: 0,
-                    bom: 0,
-                    regular: 0,
-                    ruim: 0,
+                    Ótimo: 0,
+                    Bom: 0,
+                    Regular: 0,
+                    Ruim: 0,
                     total: 0
                 };
             }
-            acc[data][vote.avaliacao.toLowerCase()]++;
+            acc[data][vote.avaliacao]++;
             acc[data].total++;
             return acc;
         }, {});
