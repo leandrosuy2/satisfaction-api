@@ -1,6 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { RatingType } from '../enums/rating-type.enum';
+import { CompanyService } from '../../companies/entities/company-service.entity'; // ajuste o caminho se necessário
+
+
 
 @Entity('votes')
 export class Vote {
@@ -47,4 +50,8 @@ export class Vote {
   @UpdateDateColumn()
   @ApiProperty({ description: 'Data da última atualização do voto' })
   updated_at: Date;
+
+  @ManyToOne(() => CompanyService, (service) => service.votes)
+  @JoinColumn({ name: 'id_tipo_servico' })
+  tipo_servico: CompanyService;
 } 

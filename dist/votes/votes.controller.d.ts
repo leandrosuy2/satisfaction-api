@@ -12,6 +12,7 @@ export declare class VotesController {
         votesByService: any;
         recentVotes: import("./entities/vote.entity").Vote[];
         votesByDay: any[];
+        votosNegativos: import("./entities/vote.entity").Vote[];
     }>;
     getAnalytics(companyId: string): Promise<{
         totalVotes: number;
@@ -20,6 +21,7 @@ export declare class VotesController {
         votesByService: any;
         recentVotes: import("./entities/vote.entity").Vote[];
         votesByDay: any[];
+        votosNegativos: import("./entities/vote.entity").Vote[];
     }>;
     findOne(id: string): Promise<import("./entities/vote.entity").Vote>;
     findByEmpresa(id_empresa: string): Promise<import("./entities/vote.entity").Vote[]>;

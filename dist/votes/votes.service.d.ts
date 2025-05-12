@@ -26,5 +26,6 @@ export declare class VotesService {
         votesByService: any;
         recentVotes: Vote[];
         votesByDay: any[];
+        votosNegativos: Vote[];
     }>;
 }

@@ -13,6 +13,7 @@ exports.Vote = void 0;
 const typeorm_1 = require("typeorm");
 const swagger_1 = require("@nestjs/swagger");
 const rating_type_enum_1 = require("../enums/rating-type.enum");
+const company_service_entity_1 = require("../../companies/entities/company-service.entity");
 let Vote = class Vote {
 };
 exports.Vote = Vote;
@@ -69,6 +70,11 @@ __decorate([
     (0, swagger_1.ApiProperty)({ description: 'Data da última atualização do voto' }),
     __metadata("design:type", Date)
 ], Vote.prototype, "updated_at", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => company_service_entity_1.CompanyService, (service) => service.votes),
+    (0, typeorm_1.JoinColumn)({ name: 'id_tipo_servico' }),
+    __metadata("design:type", company_service_entity_1.CompanyService)
+], Vote.prototype, "tipo_servico", void 0);
 exports.Vote = Vote = __decorate([
     (0, typeorm_1.Entity)('votes')
 ], Vote);

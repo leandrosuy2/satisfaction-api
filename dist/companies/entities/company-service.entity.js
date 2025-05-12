@@ -13,6 +13,7 @@ exports.CompanyService = void 0;
 const typeorm_1 = require("typeorm");
 const swagger_1 = require("@nestjs/swagger");
 const company_entity_1 = require("./company.entity");
+const vote_entity_1 = require("../../votes/entities/vote.entity");
 let CompanyService = class CompanyService {
 };
 exports.CompanyService = CompanyService;
@@ -71,6 +72,10 @@ __decorate([
     (0, typeorm_1.JoinColumn)({ name: 'id_empresa' }),
     __metadata("design:type", company_entity_1.Company)
 ], CompanyService.prototype, "company", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => vote_entity_1.Vote, (vote) => vote.tipo_servico),
+    __metadata("design:type", Array)
+], CompanyService.prototype, "votes", void 0);
 exports.CompanyService = CompanyService = __decorate([
     (0, typeorm_1.Entity)('company_services')
 ], CompanyService);

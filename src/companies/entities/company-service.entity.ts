@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { Company } from './company.entity';
+import { Vote } from '../../votes/entities/vote.entity'; // ajuste o caminho se necessário
 
 @Entity('company_services')
 export class CompanyService {
@@ -47,4 +48,7 @@ export class CompanyService {
   @ManyToOne(() => Company, company => company.servicos)
   @JoinColumn({ name: 'id_empresa' })
   company: Company;
+
+  @OneToMany(() => Vote, (vote) => vote.tipo_servico)
+  votes: Vote[];
 }

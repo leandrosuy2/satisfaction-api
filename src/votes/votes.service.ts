@@ -8,6 +8,7 @@ import { RatingType } from './enums/rating-type.enum';
 import { ServiceType } from '../service-types/entities/service-type.entity';
 import { ServiceTypesService } from '../service-types/service-types.service';
 import { Company } from '../companies/entities/company.entity';
+import { In } from 'typeorm';
 
 @Injectable()
 export class VotesService {
@@ -96,6 +97,17 @@ export class VotesService {
 
     const votes = await this.voteRepository.find({ where });
 
+    // 👇 Adicione isso aqui
+    const votosNegativos = await this.voteRepository.find({
+      where: {
+        id_empresa: companyId,
+        avaliacao: In(['Regular', 'Ruim']),
+        status: true,
+        ...(startDate && endDate ? { momento_voto: Between(new Date(startDate), new Date(endDate)) } : {})
+      },
+      relations: ['tipo_servico'], // <- isso já resolve para incluir o serviço no voto
+      order: { momento_voto: 'DESC' }
+    });
     const totalVotes = votes.length;
 
     const avaliacoesPorTipo = Object.values(RatingType).reduce((acc, tipo) => {
@@ -197,6 +209,9 @@ export class VotesService {
       votesByService: Object.fromEntries(votesByService),
       recentVotes,
       votesByDay: Object.values(votesByDay),
+      votosNegativos, // 👈 adicione isso no retorno
     };
   }
+
+
 } 

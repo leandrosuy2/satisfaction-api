@@ -1,4 +1,5 @@
 import { Company } from './company.entity';
+import { Vote } from '../../votes/entities/vote.entity';
 export declare class CompanyService {
     id: string;
     id_empresa: string;
@@ -11,4 +12,5 @@ export declare class CompanyService {
     qtd_ref: number;
     date_add: Date;
     company: Company;
+    votes: Vote[];
 }

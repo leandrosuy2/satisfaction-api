@@ -22,6 +22,7 @@ const rating_type_enum_1 = require("./enums/rating-type.enum");
 const service_type_entity_1 = require("../service-types/entities/service-type.entity");
 const service_types_service_1 = require("../service-types/service-types.service");
 const company_entity_1 = require("../companies/entities/company.entity");
+const typeorm_3 = require("typeorm");
 let VotesService = class VotesService {
     constructor(voteRepository, serviceTypeRepository, serviceTypesService, votesGateway, companyRepository) {
         this.voteRepository = voteRepository;
@@ -82,6 +83,16 @@ let VotesService = class VotesService {
             where.momento_voto = (0, typeorm_2.Between)(new Date(startDate), new Date(endDate));
         }
         const votes = await this.voteRepository.find({ where });
+        const votosNegativos = await this.voteRepository.find({
+            where: {
+                id_empresa: companyId,
+                avaliacao: (0, typeorm_3.In)(['Regular', 'Ruim']),
+                status: true,
+                ...(startDate && endDate ? { momento_voto: (0, typeorm_2.Between)(new Date(startDate), new Date(endDate)) } : {})
+            },
+            relations: ['tipo_servico'],
+            order: { momento_voto: 'DESC' }
+        });
         const totalVotes = votes.length;
         const avaliacoesPorTipo = Object.values(rating_type_enum_1.RatingType).reduce((acc, tipo) => {
             acc[tipo] = votes.filter(vote => vote.avaliacao === tipo).length;
@@ -161,6 +172,7 @@ let VotesService = class VotesService {
             votesByService: Object.fromEntries(votesByService),
             recentVotes,
             votesByDay: Object.values(votesByDay),
+            votosNegativos,
         };
     }
 };
