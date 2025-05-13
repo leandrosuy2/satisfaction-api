@@ -92,7 +92,15 @@ export class VotesService {
     };
 
     if (startDate && endDate) {
-      where.momento_voto = Between(new Date(startDate), new Date(endDate));
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+
+      const isSameDay = start.toISOString().slice(0, 10) === end.toISOString().slice(0, 10);
+      if (isSameDay) {
+        end.setDate(end.getDate() + 1); // garante que o "Hoje" inclua o dia inteiro
+      }
+
+      where.momento_voto = Between(start, end);
     }
 
     const votes = await this.voteRepository.find({ where });
@@ -103,7 +111,13 @@ export class VotesService {
         id_empresa: companyId,
         avaliacao: In(['Regular', 'Ruim']),
         status: true,
-        ...(startDate && endDate ? { momento_voto: Between(new Date(startDate), new Date(endDate)) } : {})
+        ...(startDate && endDate ? (() => {
+          const start = new Date(startDate);
+          const end = new Date(endDate);
+          const isSameDay = start.toISOString().slice(0, 10) === end.toISOString().slice(0, 10);
+          if (isSameDay) end.setDate(end.getDate() + 1);
+          return { momento_voto: Between(start, end) };
+        })() : {})
       },
       relations: ['tipo_servico'], // <- isso já resolve para incluir o serviço no voto
       order: { momento_voto: 'DESC' }
