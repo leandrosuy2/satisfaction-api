@@ -23,11 +23,27 @@ export class VotesService {
     private companyRepository: Repository<Company>,
   ) { }
 
+  // async create(createVoteDto: CreateVoteDto) {
+  //   const vote = this.voteRepository.create(createVoteDto);
+  //   const savedVote = await this.voteRepository.save(vote);
+
+  //   // Send WebSocket update
+  //   const analytics = await this.getAnalytics(createVoteDto.id_empresa);
+  //   await this.votesGateway.broadcastVoteUpdate(createVoteDto.id_empresa, analytics);
+
+  //   return savedVote;
+  // }
   async create(createVoteDto: CreateVoteDto) {
-    const vote = this.voteRepository.create(createVoteDto);
+    const vote = this.voteRepository.create({
+      ...createVoteDto,
+      momento_voto: createVoteDto.momento_voto
+        ? new Date(createVoteDto.momento_voto)
+        : new Date(), // fallback caso o app não envie
+    });
+
     const savedVote = await this.voteRepository.save(vote);
 
-    // Send WebSocket update
+    // Envia atualização via WebSocket
     const analytics = await this.getAnalytics(createVoteDto.id_empresa);
     await this.votesGateway.broadcastVoteUpdate(createVoteDto.id_empresa, analytics);
 

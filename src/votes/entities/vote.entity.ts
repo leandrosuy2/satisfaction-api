@@ -43,8 +43,8 @@ export class Vote {
   @ApiProperty({ description: 'Linha consumida pelo usuário (opcional)', maxLength: 20 })
   linha?: string;
 
-  @CreateDateColumn()
-  @ApiProperty({ description: 'Data de criação do voto' })
+  @Column({ type: 'timestamp', nullable: false })
+  @ApiProperty({ description: 'Momento exato em que o voto foi realizado' })
   momento_voto: Date;
 
   @UpdateDateColumn()

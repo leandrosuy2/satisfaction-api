@@ -1,4 +1,4 @@
-import { IsString, IsEnum, IsOptional, MaxLength } from 'class-validator';
+import { IsString, IsEnum, IsOptional, MaxLength, IsDateString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { RatingType } from '../enums/rating-type.enum';
 
@@ -37,4 +37,13 @@ export class CreateVoteDto {
   @IsString()
   @MaxLength(20)
   linha?: string;
+
+  @IsOptional()
+  @IsDateString()
+  @ApiProperty({
+    description: 'Momento exato em que o voto foi feito',
+    required: false,
+    example: '2025-05-14 08:00:00'
+  })
+  momento_voto?: string;
 }
