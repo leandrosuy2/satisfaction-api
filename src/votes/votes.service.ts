@@ -110,11 +110,7 @@ export class VotesService {
     if (startDate && endDate) {
       const start = new Date(startDate);
       const end = new Date(endDate);
-
-      const isSameDay = start.toISOString().slice(0, 10) === end.toISOString().slice(0, 10);
-      if (isSameDay) {
-        end.setDate(end.getDate() + 1); // garante que o "Hoje" inclua o dia inteiro
-      }
+      end.setDate(end.getDate() + 1); // ✅ Garante que o dia final seja incluso
 
       where.momento_voto = Between(start, end);
     }
@@ -130,8 +126,7 @@ export class VotesService {
         ...(startDate && endDate ? (() => {
           const start = new Date(startDate);
           const end = new Date(endDate);
-          const isSameDay = start.toISOString().slice(0, 10) === end.toISOString().slice(0, 10);
-          if (isSameDay) end.setDate(end.getDate() + 1);
+          end.setDate(end.getDate() + 1);
           return { momento_voto: Between(start, end) };
         })() : {})
       },
