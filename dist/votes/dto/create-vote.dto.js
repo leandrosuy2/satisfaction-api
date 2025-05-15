@@ -56,4 +56,14 @@ __decorate([
     (0, class_validator_1.MaxLength)(20),
     __metadata("design:type", String)
 ], CreateVoteDto.prototype, "linha", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsDateString)(),
+    (0, swagger_1.ApiProperty)({
+        description: 'Momento exato em que o voto foi feito',
+        required: false,
+        example: '2025-05-14 08:00:00'
+    }),
+    __metadata("design:type", String)
+], CreateVoteDto.prototype, "momento_voto", void 0);
 //# sourceMappingURL=create-vote.dto.js.map

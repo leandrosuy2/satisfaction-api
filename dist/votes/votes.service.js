@@ -32,7 +32,12 @@ let VotesService = class VotesService {
         this.companyRepository = companyRepository;
     }
     async create(createVoteDto) {
-        const vote = this.voteRepository.create(createVoteDto);
+        const vote = this.voteRepository.create({
+            ...createVoteDto,
+            momento_voto: createVoteDto.momento_voto
+                ? new Date(createVoteDto.momento_voto)
+                : new Date(),
+        });
         const savedVote = await this.voteRepository.save(vote);
         const analytics = await this.getAnalytics(createVoteDto.id_empresa);
         await this.votesGateway.broadcastVoteUpdate(createVoteDto.id_empresa, analytics);
@@ -80,7 +85,10 @@ let VotesService = class VotesService {
             status: true,
         };
         if (startDate && endDate) {
-            where.momento_voto = (0, typeorm_2.Between)(new Date(startDate), new Date(endDate));
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            end.setDate(end.getDate() + 1);
+            where.momento_voto = (0, typeorm_2.Between)(start, end);
         }
         const votes = await this.voteRepository.find({ where });
         const votosNegativos = await this.voteRepository.find({
@@ -88,7 +96,12 @@ let VotesService = class VotesService {
                 id_empresa: companyId,
                 avaliacao: (0, typeorm_3.In)(['Regular', 'Ruim']),
                 status: true,
-                ...(startDate && endDate ? { momento_voto: (0, typeorm_2.Between)(new Date(startDate), new Date(endDate)) } : {})
+                ...(startDate && endDate ? (() => {
+                    const start = new Date(startDate);
+                    const end = new Date(endDate);
+                    end.setDate(end.getDate() + 1);
+                    return { momento_voto: (0, typeorm_2.Between)(start, end) };
+                })() : {})
             },
             relations: ['tipo_servico'],
             order: { momento_voto: 'DESC' }

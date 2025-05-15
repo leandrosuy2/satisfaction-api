@@ -61,8 +61,8 @@ __decorate([
     __metadata("design:type", String)
 ], Vote.prototype, "linha", void 0);
 __decorate([
-    (0, typeorm_1.CreateDateColumn)(),
-    (0, swagger_1.ApiProperty)({ description: 'Data de criação do voto' }),
+    (0, typeorm_1.Column)({ type: 'timestamp', nullable: false }),
+    (0, swagger_1.ApiProperty)({ description: 'Momento exato em que o voto foi realizado' }),
     __metadata("design:type", Date)
 ], Vote.prototype, "momento_voto", void 0);
 __decorate([

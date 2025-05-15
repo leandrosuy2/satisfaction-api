@@ -18,6 +18,7 @@ const questions_module_1 = require("./questions/questions.module");
 const questionnaires_module_1 = require("./questionnaires/questionnaires.module");
 const websocket_module_1 = require("./websocket/websocket.module");
 const votes_module_1 = require("./votes/votes.module");
+const app_modules_1 = require("./app/app.modules");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -49,6 +50,7 @@ exports.AppModule = AppModule = __decorate([
             questionnaires_module_1.QuestionnairesModule,
             websocket_module_1.WebsocketModule,
             votes_module_1.VotesModule,
+            app_modules_1.AppPublic,
         ],
     })
 ], AppModule);

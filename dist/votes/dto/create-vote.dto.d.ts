@@ -5,4 +5,5 @@ export declare class CreateVoteDto {
     avaliacao: RatingType;
     comentario?: string;
     linha?: string;
+    momento_voto?: string;
 }
