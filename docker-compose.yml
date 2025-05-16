@@ -15,11 +15,14 @@ services:
       - DATABASE_PASSWORD=postgres
       - DATABASE_NAME=satisfaction
       - JWT_SECRET=40c4at-6sCVQXff9hHylOvUOQgfSYT_i_gXkPsBzs5wLbyoNx-jMsOJMI2rM5mumdi9GIFN227H7DILkyid3hg
+      - TZ=America/Manaus
     depends_on:
       - postgres
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
     command: npm run start:dev
 
   postgres:
@@ -30,8 +33,11 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=satisfaction
+      - TZ=America/Manaus
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
 
 volumes:
   postgres_data:
