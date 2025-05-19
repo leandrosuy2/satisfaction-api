@@ -107,12 +107,25 @@ export class VotesService {
       status: true,
     };
 
+    // if (startDate && endDate) {
+    //   const start = new Date(startDate);
+    //   const end = new Date(endDate);
+    //   end.setDate(end.getDate() + 1); // ✅ Garante que o dia final seja incluso
+
+    //   where.momento_voto = Between(start, end);
+    // }
+
     if (startDate && endDate) {
       const start = new Date(startDate);
       const end = new Date(endDate);
       end.setDate(end.getDate() + 1); // ✅ Garante que o dia final seja incluso
-
       where.momento_voto = Between(start, end);
+    } else {
+      const startOfDay = new Date();
+      startOfDay.setHours(0, 0, 0, 0);
+      const endOfDay = new Date();
+      endOfDay.setHours(23, 59, 59, 999);
+      where.momento_voto = Between(startOfDay, endOfDay);
     }
 
     const votes = await this.voteRepository.find({ where });
@@ -123,12 +136,26 @@ export class VotesService {
         id_empresa: companyId,
         avaliacao: In(['Regular', 'Ruim']),
         status: true,
-        ...(startDate && endDate ? (() => {
-          const start = new Date(startDate);
-          const end = new Date(endDate);
-          end.setDate(end.getDate() + 1);
-          return { momento_voto: Between(start, end) };
-        })() : {})
+        // ...(startDate && endDate ? (() => {
+        //   const start = new Date(startDate);
+        //   const end = new Date(endDate);
+        //   end.setDate(end.getDate() + 1);
+        //   return { momento_voto: Between(start, end) };
+        // })() : {})
+        ...(startDate && endDate
+          ? (() => {
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            end.setDate(end.getDate() + 1);
+            return { momento_voto: Between(start, end) };
+          })()
+          : (() => {
+            const startOfDay = new Date();
+            startOfDay.setHours(0, 0, 0, 0);
+            const endOfDay = new Date();
+            endOfDay.setHours(23, 59, 59, 999);
+            return { momento_voto: Between(startOfDay, endOfDay) };
+          })())
       },
       relations: ['tipo_servico'], // <- isso já resolve para incluir o serviço no voto
       order: { momento_voto: 'DESC' }
