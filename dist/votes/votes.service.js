@@ -90,18 +90,33 @@ let VotesService = class VotesService {
             end.setDate(end.getDate() + 1);
             where.momento_voto = (0, typeorm_2.Between)(start, end);
         }
+        else {
+            const startOfDay = new Date();
+            startOfDay.setHours(0, 0, 0, 0);
+            const endOfDay = new Date();
+            endOfDay.setHours(23, 59, 59, 999);
+            where.momento_voto = (0, typeorm_2.Between)(startOfDay, endOfDay);
+        }
         const votes = await this.voteRepository.find({ where });
         const votosNegativos = await this.voteRepository.find({
             where: {
                 id_empresa: companyId,
                 avaliacao: (0, typeorm_3.In)(['Regular', 'Ruim']),
                 status: true,
-                ...(startDate && endDate ? (() => {
-                    const start = new Date(startDate);
-                    const end = new Date(endDate);
-                    end.setDate(end.getDate() + 1);
-                    return { momento_voto: (0, typeorm_2.Between)(start, end) };
-                })() : {})
+                ...(startDate && endDate
+                    ? (() => {
+                        const start = new Date(startDate);
+                        const end = new Date(endDate);
+                        end.setDate(end.getDate() + 1);
+                        return { momento_voto: (0, typeorm_2.Between)(start, end) };
+                    })()
+                    : (() => {
+                        const startOfDay = new Date();
+                        startOfDay.setHours(0, 0, 0, 0);
+                        const endOfDay = new Date();
+                        endOfDay.setHours(23, 59, 59, 999);
+                        return { momento_voto: (0, typeorm_2.Between)(startOfDay, endOfDay) };
+                    })())
             },
             relations: ['tipo_servico'],
             order: { momento_voto: 'DESC' }
