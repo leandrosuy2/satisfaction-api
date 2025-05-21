@@ -109,7 +109,7 @@ export class VotesService {
 
     // if (startDate && endDate) {
     //   const start = new Date(startDate);
-    //   const end = new Date(endDate);
+    //   const end = new Date(endDate);S
     //   end.setDate(end.getDate() + 1); // ✅ Garante que o dia final seja incluso
 
     //   where.momento_voto = Between(start, end);

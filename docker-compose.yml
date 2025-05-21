@@ -14,7 +14,7 @@ services:
       - DATABASE_USERNAME=postgres
       - DATABASE_PASSWORD=postgres
       - DATABASE_NAME=satisfaction
-      - JWT_SECRET=40c4at-6sCVQXff9hHylOvUOQgfSYT_i_gXkPsBzs5wLbyoNx-jMsOJMI2rM5mumdi9GIFN227H7DILkyid3hg
+      - JWT_SECRET=...
       - TZ=America/Manaus
     depends_on:
       - postgres
@@ -38,6 +38,16 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
+
+  mongo:
+    # <<< aqui estava o erro, corrigido o alinhamento
+    image: mongo:6
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./db_surveys:/backup
+    environment:
+      - TZ=America/Manaus
 
 volumes:
   postgres_data:
