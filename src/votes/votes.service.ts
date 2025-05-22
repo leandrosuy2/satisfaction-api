@@ -9,6 +9,8 @@ import { ServiceType } from '../service-types/entities/service-type.entity';
 import { ServiceTypesService } from '../service-types/service-types.service';
 import { Company } from '../companies/entities/company.entity';
 import { In } from 'typeorm';
+import { User } from '../users/entities/user.entity';
+import { AccessProfile } from '../users/enums/access-profile.enum';
 
 @Injectable()
 export class VotesService {
@@ -21,6 +23,8 @@ export class VotesService {
     private votesGateway: VotesGateway,
     @InjectRepository(Company)
     private companyRepository: Repository<Company>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
   ) { }
 
   // async create(createVoteDto: CreateVoteDto) {
@@ -265,5 +269,68 @@ export class VotesService {
     };
   }
 
+  async findAllByUserAccess(userId: string) {
+    // Primeiro busca o usuário sem carregar as empresas
+    const user = await this.userRepository
+      .createQueryBuilder('user')
+      .select(['user.id', 'user.perfil_acesso'])
+      .where('user.id = :userId AND user.status = true', { userId })
+      .getOne();
 
+    if (!user) {
+      throw new NotFoundException(`User with ID ${userId} not found`);
+    }
+
+    // Se não for admin/TI, busca as empresas do usuário
+    let companyIds: string[] = [];
+    if (user.perfil_acesso !== AccessProfile.ADMINISTRADOR && user.perfil_acesso !== AccessProfile.TI) {
+      const userWithCompanies = await this.userRepository
+        .createQueryBuilder('user')
+        .select(['user.id', 'empresas.id'])
+        .leftJoin('user.empresas', 'empresas')
+        .where('user.id = :userId', { userId })
+        .getOne();
+
+      if (userWithCompanies?.empresas) {
+        companyIds = userWithCompanies.empresas.map(e => e.id);
+      }
+    }
+
+    // Monta a query base
+    const queryBuilder = this.voteRepository
+      .createQueryBuilder('vote')
+      .select([
+        'vote.id_voto',
+        'vote.id_empresa',
+        'vote.id_tipo_servico',
+        'vote.avaliacao',
+        'vote.momento_voto',
+        'vote.status',
+        'vote.comentario',
+        'vote.linha'
+      ])
+      .where('vote.status = true')
+      .orderBy('vote.momento_voto', 'DESC')
+      .take(50); // Reduzindo para 50 registros
+
+    // Aplica os filtros baseado no perfil
+    if (user.perfil_acesso === AccessProfile.ADMINISTRADOR || user.perfil_acesso === AccessProfile.TI) {
+      return queryBuilder.getMany();
+    }
+
+    if (user.perfil_acesso === AccessProfile.DIRETOR || user.perfil_acesso === AccessProfile.GERENTE) {
+      if (companyIds.length === 0) return [];
+      return queryBuilder
+        .andWhere('vote.id_empresa IN (:...companyIds)', { companyIds })
+        .getMany();
+    }
+
+    if (companyIds.length > 0) {
+      return queryBuilder
+        .andWhere('vote.id_empresa = :companyId', { companyId: companyIds[0] })
+        .getMany();
+    }
+
+    return [];
+  }
 } 

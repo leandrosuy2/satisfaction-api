@@ -1,10 +1,11 @@
 import { CreateVoteDto } from './dto/create-vote.dto';
 import { VotesService } from './votes.service';
+import { Request } from 'express';
 export declare class VotesController {
     private readonly votesService;
     constructor(votesService: VotesService);
     create(createVoteDto: CreateVoteDto): Promise<import("./entities/vote.entity").Vote>;
-    findAll(): Promise<import("./entities/vote.entity").Vote[]>;
+    findAll(req: Request): Promise<import("./entities/vote.entity").Vote[]>;
     getAnalyticsRelatorio(companyId: string, startDate?: string, endDate?: string): Promise<{
         totalVotes: number;
         avaliacoesPorTipo: Record<import("./enums/rating-type.enum").RatingType, number>;

@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Param, Delete, UseGuards, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, UseGuards, Query, Req } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { CreateVoteDto } from './dto/create-vote.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { VotesService } from './votes.service';
+import { Request } from 'express';
 
 @ApiTags('votes')
 @ApiBearerAuth()
@@ -19,10 +20,11 @@ export class VotesController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Get all votes' })
-  @ApiResponse({ status: 200, description: 'Return all votes' })
-  findAll() {
-    return this.votesService.findAll();
+  @ApiOperation({ summary: 'Get all votes accessible to the user' })
+  @ApiResponse({ status: 200, description: 'Return all votes accessible to the user' })
+  findAll(@Req() req: Request) {
+    const userId = req.user['id'];
+    return this.votesService.findAllByUserAccess(userId);
   }
 
   // @Get('analytics/:companyId')

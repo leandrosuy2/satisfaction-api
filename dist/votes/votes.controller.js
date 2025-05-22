@@ -25,8 +25,9 @@ let VotesController = class VotesController {
     create(createVoteDto) {
         return this.votesService.create(createVoteDto);
     }
-    findAll() {
-        return this.votesService.findAll();
+    findAll(req) {
+        const userId = req.user['id'];
+        return this.votesService.findAllByUserAccess(userId);
     }
     getAnalyticsRelatorio(companyId, startDate, endDate) {
         return this.votesService.getAnalytics(companyId, startDate, endDate);
@@ -63,10 +64,11 @@ __decorate([
 ], VotesController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
-    (0, swagger_1.ApiOperation)({ summary: 'Get all votes' }),
-    (0, swagger_1.ApiResponse)({ status: 200, description: 'Return all votes' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Get all votes accessible to the user' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Return all votes accessible to the user' }),
+    __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], VotesController.prototype, "findAll", null);
 __decorate([

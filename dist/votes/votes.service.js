@@ -23,13 +23,16 @@ const service_type_entity_1 = require("../service-types/entities/service-type.en
 const service_types_service_1 = require("../service-types/service-types.service");
 const company_entity_1 = require("../companies/entities/company.entity");
 const typeorm_3 = require("typeorm");
+const user_entity_1 = require("../users/entities/user.entity");
+const access_profile_enum_1 = require("../users/enums/access-profile.enum");
 let VotesService = class VotesService {
-    constructor(voteRepository, serviceTypeRepository, serviceTypesService, votesGateway, companyRepository) {
+    constructor(voteRepository, serviceTypeRepository, serviceTypesService, votesGateway, companyRepository, userRepository) {
         this.voteRepository = voteRepository;
         this.serviceTypeRepository = serviceTypeRepository;
         this.serviceTypesService = serviceTypesService;
         this.votesGateway = votesGateway;
         this.companyRepository = companyRepository;
+        this.userRepository = userRepository;
     }
     async create(createVoteDto) {
         const vote = this.voteRepository.create({
@@ -203,6 +206,59 @@ let VotesService = class VotesService {
             votosNegativos,
         };
     }
+    async findAllByUserAccess(userId) {
+        const user = await this.userRepository
+            .createQueryBuilder('user')
+            .select(['user.id', 'user.perfil_acesso'])
+            .where('user.id = :userId AND user.status = true', { userId })
+            .getOne();
+        if (!user) {
+            throw new common_1.NotFoundException(`User with ID ${userId} not found`);
+        }
+        let companyIds = [];
+        if (user.perfil_acesso !== access_profile_enum_1.AccessProfile.ADMINISTRADOR && user.perfil_acesso !== access_profile_enum_1.AccessProfile.TI) {
+            const userWithCompanies = await this.userRepository
+                .createQueryBuilder('user')
+                .select(['user.id', 'empresas.id'])
+                .leftJoin('user.empresas', 'empresas')
+                .where('user.id = :userId', { userId })
+                .getOne();
+            if (userWithCompanies?.empresas) {
+                companyIds = userWithCompanies.empresas.map(e => e.id);
+            }
+        }
+        const queryBuilder = this.voteRepository
+            .createQueryBuilder('vote')
+            .select([
+            'vote.id_voto',
+            'vote.id_empresa',
+            'vote.id_tipo_servico',
+            'vote.avaliacao',
+            'vote.momento_voto',
+            'vote.status',
+            'vote.comentario',
+            'vote.linha'
+        ])
+            .where('vote.status = true')
+            .orderBy('vote.momento_voto', 'DESC')
+            .take(50);
+        if (user.perfil_acesso === access_profile_enum_1.AccessProfile.ADMINISTRADOR || user.perfil_acesso === access_profile_enum_1.AccessProfile.TI) {
+            return queryBuilder.getMany();
+        }
+        if (user.perfil_acesso === access_profile_enum_1.AccessProfile.DIRETOR || user.perfil_acesso === access_profile_enum_1.AccessProfile.GERENTE) {
+            if (companyIds.length === 0)
+                return [];
+            return queryBuilder
+                .andWhere('vote.id_empresa IN (:...companyIds)', { companyIds })
+                .getMany();
+        }
+        if (companyIds.length > 0) {
+            return queryBuilder
+                .andWhere('vote.id_empresa = :companyId', { companyId: companyIds[0] })
+                .getMany();
+        }
+        return [];
+    }
 };
 exports.VotesService = VotesService;
 exports.VotesService = VotesService = __decorate([
@@ -210,10 +266,12 @@ exports.VotesService = VotesService = __decorate([
     __param(0, (0, typeorm_1.InjectRepository)(vote_entity_1.Vote)),
     __param(1, (0, typeorm_1.InjectRepository)(service_type_entity_1.ServiceType)),
     __param(4, (0, typeorm_1.InjectRepository)(company_entity_1.Company)),
+    __param(5, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
         typeorm_2.Repository,
         service_types_service_1.ServiceTypesService,
         votes_gateway_1.VotesGateway,
+        typeorm_2.Repository,
         typeorm_2.Repository])
 ], VotesService);
 //# sourceMappingURL=votes.service.js.map
